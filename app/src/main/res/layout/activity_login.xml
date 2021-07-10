@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="19"
-        android:text="In order to continue please log in"
+        android:text="@string/login_message"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:text="Login"
+        android:text="@string/login"
         android:layout_marginBottom="32dp"
         android:backgroundTint="#4EBBBBBB"
         app:cornerRadius="25dp"
@@ -65,7 +65,7 @@
             android:id="@+id/email_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +86,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,6 +94,7 @@
         android:id="@+id/top_right_illustration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/shows_title"
         app:srcCompat="@drawable/top_right_illustration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -102,6 +103,7 @@
         android:id="@+id/top_left_illustration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/shows_title"
         app:srcCompat="@drawable/top_left_illustration"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -112,6 +114,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/triangle"
         android:layout_marginLeft="56dp"
+        android:contentDescription="@string/shows_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/loginText"/>
@@ -121,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="Shows"
+        android:text="@string/shows_title"
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"
