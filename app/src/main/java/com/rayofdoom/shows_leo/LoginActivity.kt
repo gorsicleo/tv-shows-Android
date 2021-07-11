@@ -1,13 +1,11 @@
 package com.rayofdoom.shows_leo
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
-import com.google.android.material.textfield.TextInputLayout
 import com.rayofdoom.shows_leo.databinding.ActivityLoginBinding
 
 
@@ -97,8 +95,11 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setTextColor(Color.parseColor("#52368C"))
         }
         binding.loginButton.setOnClickListener{
-            val alertDialogBuilder = AlertDialog.Builder(this)
-            alertDialogBuilder.setMessage("USPJEH").show()
+            //val alertDialogBuilder = AlertDialog.Builder(this)
+            //alertDialogBuilder.setMessage("USPJEH").show()
+            intent = Intent(this, WelcomeActivity::class.java)
+            intent.putExtra("user",binding.emailInput.text )
+            startActivity(intent)
 
         }
     }
