@@ -95,8 +95,8 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setTextColor(Color.parseColor("#52368C"))
         }
         binding.loginButton.setOnClickListener{
-            //val alertDialogBuilder = AlertDialog.Builder(this)
-            //alertDialogBuilder.setMessage("USPJEH").show()
+            //val alertDialogBuilder = AlertDialog.Builder(this) //
+            //alertDialogBuilder.setMessage("USPJEH").show() //USED FOR TESTING PURPOSES
             intent = Intent(this, WelcomeActivity::class.java)
             intent.putExtra("user",binding.emailInput.text )
             startActivity(intent)
