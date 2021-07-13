@@ -60,7 +60,6 @@ class LoginActivity : AppCompatActivity() {
         conditionEmail = false
         binding.apply {
             loginButton.isEnabled = false
-            loginButton.setBackgroundColor(getColor(R.color.btn_disabled_background_color))
             emailInput.error = errorMessage
         }
     }
@@ -70,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
         conditionPass = false
         binding.apply {
             loginButton.isEnabled = false
-            loginButton.setBackgroundColor(getColor(R.color.btn_disabled_background_color))
             passwordInput.error = errorMessage
         }
     }
@@ -80,8 +78,6 @@ class LoginActivity : AppCompatActivity() {
         if (conditionEmail && conditionPass) {
             binding.loginButton.apply {
                 isEnabled = true
-                setBackgroundColor(Color.WHITE)
-                setTextColor(getColor(R.color.btn_enabled_text_color))
             }
         }
         binding.loginButton.setOnClickListener {

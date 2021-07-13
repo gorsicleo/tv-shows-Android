@@ -38,15 +38,8 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_button"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/btn_disabled_background_color"
-            android:clickable="false"
+            style="@style/button_style"
             android:text="@string/login"
-            android:textAllCaps="false"
-            app:cornerRadius="@dimen/button_radius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/email_container"
             app:layout_constraintStart_toStartOf="@id/login_text"
