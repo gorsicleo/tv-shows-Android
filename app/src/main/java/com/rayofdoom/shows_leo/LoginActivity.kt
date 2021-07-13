@@ -1,7 +1,6 @@
 package com.rayofdoom.shows_leo
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.rayofdoom.shows_leo.databinding.ActivityLoginBinding
