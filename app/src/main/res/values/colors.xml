@@ -11,5 +11,5 @@
     <color name="btn_disabled_background_color">#4EBBBBBB</color>
     <color name="btn_enabled_text_color">#52368C</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" override="true">#fff</color>
+    <color name="mtrl_textinput_default_box_stroke_color" override="true">@color/white</color>
 </resources>
