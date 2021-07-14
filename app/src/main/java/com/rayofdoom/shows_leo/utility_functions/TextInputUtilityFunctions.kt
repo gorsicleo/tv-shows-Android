@@ -18,14 +18,3 @@ fun TextInputEditText.addTextChangedValidator(validate: (String) -> Unit) {
 
     })
 }
-
-
-
-
-
-
-
-
-
-
-

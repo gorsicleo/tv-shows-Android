@@ -1,5 +1,7 @@
 package com.rayofdoom.shows_leo
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.rayofdoom.shows_leo.databinding.ActivityWelcomeBinding
@@ -9,6 +11,17 @@ private const val EMAIL_USERNAME_SEPARATOR = "@"
 class WelcomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWelcomeBinding
+
+    companion object {
+
+        private const val EXTRA_USERNAME = "EXTRA_USERNAME"
+
+        fun buildIntent(activity: Activity, username: String): Intent {
+            val intent = Intent(activity, WelcomeActivity::class.java)
+            intent.putExtra(EXTRA_USERNAME, username)
+            return intent
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +33,10 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun displayWelcomeMessage() {
-        val welcomeMessage = intent.getStringExtra("user").toString()
+        val welcomeMessage = intent.getStringExtra(EXTRA_USERNAME).toString()
             .subSequence(
                 0,
-                intent.getStringExtra("user").toString().indexOf(EMAIL_USERNAME_SEPARATOR)
+                intent.getStringExtra(EXTRA_USERNAME).toString().indexOf(EMAIL_USERNAME_SEPARATOR)
             )
 
         binding.welcomeMessage.text = String.format("Welcome, %s", welcomeMessage)

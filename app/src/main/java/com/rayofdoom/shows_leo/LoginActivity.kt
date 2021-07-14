@@ -1,6 +1,5 @@
 package com.rayofdoom.shows_leo
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.rayofdoom.shows_leo.databinding.ActivityLoginBinding
@@ -80,8 +79,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.loginButton.setOnClickListener {
-            intent = Intent(this, WelcomeActivity::class.java)
-            intent.putExtra("user", binding.emailInput.text.toString())
+            intent = WelcomeActivity.buildIntent(this, binding.emailInput.text.toString())
             startActivity(intent)
 
         }
