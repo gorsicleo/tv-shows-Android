@@ -30,6 +30,10 @@ class WelcomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         displayWelcomeMessage()
+
+        Thread{
+            makeIntent()
+        }.start()
     }
 
     private fun displayWelcomeMessage() {
@@ -40,5 +44,10 @@ class WelcomeActivity : AppCompatActivity() {
             )
 
         binding.welcomeMessage.text = String.format("Welcome, %s", welcomeMessage)
+    }
+    private fun makeIntent() {
+        //this is used to shortly display welcome message to the user before making intent
+        Thread.sleep(1500)
+        startActivity(Intent(this, ShowsActivity::class.java))
     }
 }
