@@ -12,4 +12,9 @@
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">22dp</item>
     </style>
+
+    <style name="rating_bar_style" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/rating_bar_purple</item>
+        <item name="colorControlActivated">@color/rating_bar_purple</item>
+    </style>
 </resources>

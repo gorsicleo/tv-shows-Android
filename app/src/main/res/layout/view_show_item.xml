@@ -26,15 +26,15 @@
                 tools:src="@drawable/kt2" />
 
             <TextView
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="12dp"
                 android:id="@+id/show_title"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_gravity="bottom"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/black"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 tools:text="Lorem Ipsum" />
 
             <TextView
@@ -43,8 +43,8 @@
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="12dp"
-                android:textSize="16sp"
                 android:textColor="@color/gray"
+                android:textSize="16sp"
                 tools:text="@tools:sample/lorem/random" />
 
         </LinearLayout>

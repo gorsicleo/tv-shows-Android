@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:toools="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    tools:context=".ShowDetailsActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/show_details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginVertical="32dp"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            tools:text="Krv nije voda"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="232dp"
+            android:layout_marginHorizontal="24dp"
+            toools:cardCornerRadius="12dp">
+            <ImageView
+                android:id="@+id/show_details_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:src="@drawable/krv_nije_voda_1"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/show_details_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="29dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            tools:text="@string/krv_nije_voda_description"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="Reviews"/>
+        <TextView
+            android:id="@+id/show_details_review_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="14sp"
+            tools:text="3 REVIEWS, 3.63 AVERAGE"/>
+
+
+        <RatingBar
+            android:id="@+id/show_details_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:theme="@style/rating_bar_style"
+            tools:rating="3.5"/>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</ScrollView>
