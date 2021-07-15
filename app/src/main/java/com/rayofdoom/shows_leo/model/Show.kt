@@ -1,4 +1,11 @@
 package com.rayofdoom.shows_leo.model
 
-class Show {
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+
+data class Show(
+    val showTitle: String,
+    @StringRes val showDescription: Int,
+    @DrawableRes val imageResource: Int
+) {
 }
