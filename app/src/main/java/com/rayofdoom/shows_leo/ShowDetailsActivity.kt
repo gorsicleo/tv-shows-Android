@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rayofdoom.shows_leo.ShowDetailsActivity.Companion.buildIntent
 import com.rayofdoom.shows_leo.databinding.ActivityShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 
@@ -50,6 +51,8 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding = ActivityShowDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         binding.apply {
             showDetailsDescription.setText(intent.getIntExtra(EXTRA_SHOW_DESCRIPTION, -1))
             showDetailsImage.setImageResource(
@@ -59,6 +62,11 @@ class ShowDetailsActivity : AppCompatActivity() {
                 )
             )
             collapsingToolbar.title = intent.getStringExtra(EXTRA_SHOW_TITLE)
+
+        }
+        //kako dobiti ovaj activity kada smo u appy scope functionu?!
+        binding.backButton.setOnClickListener {
+            startActivity(ShowsActivity.buildIntent(this))
         }
 
 

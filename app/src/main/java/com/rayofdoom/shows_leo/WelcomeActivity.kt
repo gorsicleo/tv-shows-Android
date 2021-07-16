@@ -48,6 +48,6 @@ class WelcomeActivity : AppCompatActivity() {
     private fun makeIntent() {
         //this is used to shortly display welcome message to the user before making intent
         Thread.sleep(1500)
-        startActivity(Intent(this, ShowsActivity::class.java))
+        startActivity(ShowsActivity.buildIntent(this))
     }
 }

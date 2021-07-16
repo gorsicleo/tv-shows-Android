@@ -1,8 +1,11 @@
 package com.rayofdoom.shows_leo
 
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rayofdoom.shows_leo.databinding.ActivityShowsBinding
@@ -10,6 +13,13 @@ import com.rayofdoom.shows_leo.model.Show
 
 class ShowsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowsBinding
+    companion object {
+
+
+        fun buildIntent(activity: Activity, ): Intent {
+            return Intent(activity, ShowsActivity::class.java)
+        }
+    }
 
     private val shows = listOf(
         Show("Krim tim 2", R.string.krim_tim_2_description, R.drawable.kt2),
@@ -34,9 +44,15 @@ class ShowsActivity : AppCompatActivity() {
 
 
         initRecyclerView()
+        binding.clearButton.setOnClickListener {
+            Toast.makeText(this, "Show list cleared", Toast.LENGTH_SHORT).show()
+            binding.showsRecycler.visibility = View.INVISIBLE
+        }
         binding.backButton.setOnClickListener{
             startActivity(LoginActivity.buildIntent(this))
         }
+
+
     }
 
 

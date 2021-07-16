@@ -5,6 +5,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="shows_title">Shows</string>
+    <string name="no_shows_message">Your shows are not showing. Get it? </string>
     <string name="error_email_no_at_sign">Email address is not valid because @ is missing!</string>
     <string name="error_email_too_short">Email must have at least 2 characters!</string>
     <string name="error_password_too_short">Password is weak. Minimum of 6 characters</string>
