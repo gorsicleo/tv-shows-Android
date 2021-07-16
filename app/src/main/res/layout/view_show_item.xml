@@ -47,7 +47,7 @@
                 tools:text="@tools:sample/lorem/random" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

@@ -8,11 +8,9 @@ import com.rayofdoom.shows_leo.databinding.ActivityWelcomeBinding
 
 private const val EMAIL_USERNAME_SEPARATOR = "@"
 
-
 class WelcomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWelcomeBinding
-    //var username = intent.getStringExtra(EXTRA_USERNAME).toString() // ZAŠTO NE RADI??
 
     companion object {
 
