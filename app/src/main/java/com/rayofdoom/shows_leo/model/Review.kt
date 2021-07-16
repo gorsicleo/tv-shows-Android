@@ -7,5 +7,4 @@ data class Review(
     val userReview: String,
     @DrawableRes val userProfilePicture: Int,
     val userRating: Double
-) {
-}
+)
