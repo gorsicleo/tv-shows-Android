@@ -17,4 +17,8 @@
         <item name="colorControlNormal">@color/rating_bar_purple</item>
         <item name="colorControlActivated">@color/rating_bar_purple</item>
     </style>
+
+    <style name="collapsing_toolbar_style" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
 </resources>

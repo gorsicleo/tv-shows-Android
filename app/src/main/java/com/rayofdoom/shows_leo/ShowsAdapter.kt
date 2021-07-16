@@ -2,14 +2,13 @@ package com.rayofdoom.shows_leo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.rayofdoom.shows_leo.databinding.ViewShowItemBinding
 import com.rayofdoom.shows_leo.model.Show
 
 class ShowsAdapter (
     private var items: List<Show>,
-    private val onClickCallback: (String) -> Unit
+    private val onClickCallback: (Show) -> Unit
         ): RecyclerView.Adapter<ShowsAdapter.ShowsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowsViewHolder {
@@ -32,7 +31,7 @@ class ShowsAdapter (
             binding.showDescription.text = itemView.context.getString(item.showDescription)
             binding.showImage.setImageResource(item.imageResource)
             binding.root.setOnClickListener{
-                onClickCallback(item.showTitle)
+                onClickCallback(item)
             }
         }
     }

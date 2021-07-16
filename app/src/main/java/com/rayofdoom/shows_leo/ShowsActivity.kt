@@ -1,7 +1,6 @@
 package com.rayofdoom.shows_leo
 
-import android.app.Activity
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -28,18 +27,30 @@ class ShowsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
         binding = ActivityShowsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
 
         initRecyclerView()
+        binding.backButton.setOnClickListener{
+            startActivity(LoginActivity.buildIntent(this))
+        }
     }
+
 
     private fun initRecyclerView() {
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.showsRecycler.adapter = ShowsAdapter(shows) { name ->
-            intent = ShowDetailsActivity.buildIntent(this, name)
+        binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
+            Toast.makeText(this, show.showTitle, Toast.LENGTH_SHORT).show()
+            intent = ShowDetailsActivity.buildIntent(
+                activity = this,
+                showTitle = show.showTitle,
+                showDescription = show.showDescription,
+                showImage = show.imageResource
+            )
             startActivity(intent)
         }
     }
