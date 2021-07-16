@@ -56,7 +56,6 @@ class ShowsActivity : AppCompatActivity() {
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
-            Toast.makeText(this, show.showTitle, Toast.LENGTH_SHORT).show()
             intent = ShowDetailsActivity.buildIntent(
                 username = intent.getStringExtra(EXTRA_USERNAME).toString(),
                 activity = this,

@@ -113,7 +113,7 @@ class ShowDetailsActivity : AppCompatActivity() {
                             ).toString(),
                         dialogBinding.reviewInput.text.toString(),
                         R.drawable.ic_profile_placeholder,
-                        dialogBinding.rating.rating.toDouble()
+                        dialogBinding.rating.rating.toInt()
                     )
                 )
                 reviewsAdapter?.addItem(reviews)
