@@ -92,8 +92,10 @@ class LoginFragment: Fragment() {
             }
         }
         binding.loginButton.setOnClickListener {
-            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString())
-            findNavController().navigate(R.id.action_login_to_shows)
+            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString()).also{
+                findNavController().navigate(it)
+            }
+
         }
     }
 

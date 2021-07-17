@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
@@ -15,17 +19,22 @@ import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
 import com.rayofdoom.shows_leo.utility_functions.round
 
-private const val EXTRA_SHOW_TITLE = "EXTRA_SHOW_TITLE"
-private const val EXTRA_SHOW_DESCRIPTION = "EXTRA_SHOW_DESCRIPTION"
-private const val EXTRA_SHOW_IMAGE_ID = "EXTRA_SHOW_IMAGE_ID"
-private const val EXTRA_USERNAME = "EXTRA_USERNAME"
+
 private const val EMAIL_USERNAME_SEPARATOR = "@"
 
-class ShowDetailsFragment: Fragment() {
+class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private var reviewsAdapter: ItemReviewAdapter? = null
     private val reviews: MutableList<Review> = fillReviewData()
+
+    private val args: ShowDetailsFragmentArgs by navArgs()
+//    private val username = args.username
+//    private val showTitle = args.showTitle
+//    @StringRes
+//    private val showDescription = args.showDescriptionResId
+//    @DrawableRes
+//    private val showImage = args.showImageResId
 
 
     override fun onCreateView(
@@ -45,23 +54,16 @@ class ShowDetailsFragment: Fragment() {
         }
 
         binding.apply {
-            showDetailsDescription.setText(intent.getIntExtra(ShowDetailsActivity.EXTRA_SHOW_DESCRIPTION, -1))
-            showDetailsImage.setImageResource(
-                intent.getIntExtra(
-                    ShowDetailsActivity.EXTRA_SHOW_IMAGE_ID,
-                    R.drawable.kt2
-                )
-            )
-            collapsingToolbar.title = intent.getStringExtra(ShowDetailsActivity.EXTRA_SHOW_TITLE)
+            showDetailsDescription.setText(args.showDescriptionResId)
+            showDetailsImage.setImageResource(args.showImageResId)
+
+            collapsingToolbar.title = args.showTitle
         }
 
         binding.backButton.setOnClickListener {
-            startActivity(
-                ShowsActivity.buildIntent(
-                    this,
-                    intent.getStringExtra(ShowDetailsActivity.EXTRA_USERNAME).toString()
-                )
-            )
+            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also{
+                findNavController().navigate(it)
+            }
         }
 
         binding.buttonWriteReview.setOnClickListener {
@@ -73,7 +75,7 @@ class ShowDetailsFragment: Fragment() {
 
     private fun initRecyclerView() {
         binding.reviewsRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter = ItemReviewAdapter(reviews)
         displayAverage()
         binding.reviewsRecycler.adapter = reviewsAdapter
@@ -85,22 +87,27 @@ class ShowDetailsFragment: Fragment() {
         dialog.setContentView(dialogBinding.root)
 
         dialogBinding.addReviewButton.setOnClickListener {
-            Toast.makeText(requireContext(), dialogBinding.reviewInput.text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, dialogBinding.reviewInput.text, Toast.LENGTH_SHORT)
+                .show()
         }
 
         dialog.show()
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toDouble() == 0.0) {
-                Toast.makeText(requireContext(), "You must enter score to submit a review!", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    "You must enter score to submit a review!",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 reviews.add(
                     Review(
-                        intent.getStringExtra(ShowDetailsActivity.EXTRA_USERNAME).toString()
+                        args.username
                             .subSequence(
                                 0,
-                                intent.getStringExtra(ShowDetailsActivity.EXTRA_USERNAME).toString()
-                                    .indexOf(ShowDetailsActivity.EMAIL_USERNAME_SEPARATOR)
+                                args.username
+                                    .indexOf(EMAIL_USERNAME_SEPARATOR)
                             ).toString(),
                         dialogBinding.reviewInput.text.toString(),
                         R.drawable.ic_profile_placeholder,

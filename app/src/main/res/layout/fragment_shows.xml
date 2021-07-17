@@ -31,16 +31,6 @@
                 app:layout_collapseMode="pin">
 
                 <ImageButton
-                    android:id="@+id/back_button"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/arrow_back"
-                    app:layout_collapseMode="pin" />
-
-                <ImageButton
                     android:id="@+id/clear_button"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -49,6 +39,18 @@
                     android:focusable="true"
                     android:src="@drawable/clear_icon"
                     app:layout_collapseMode="pin" />
+
+                <ImageButton
+                    android:id="@+id/log_out_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/log_out_button"
+
+                    app:layout_collapseMode="pin" />
+
 
             </androidx.appcompat.widget.Toolbar>
 
