@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/login_fragment">
+
+    <fragment android:id="@+id/login_fragment"
+        android:name="com.rayofdoom.shows_leo.LoginFragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_login_to_shows"
+            app:destination="@id/shows_fragment" />
+    </fragment>
+
+    <fragment android:id="@+id/shows_fragment"
+        android:name="com.rayofdoom.shows_leo.ShowsFragment"
+        tools:layout="@layout/fragment_shows">
+
+        <argument
+            android:name="username"
+            app:argType="string"
+            />
+
+        <action
+            android:id="@+id/action_shows_to_shows_details"
+            app:destination="@id/shows_fragment" />
+    </fragment>
+
 
 </navigation>

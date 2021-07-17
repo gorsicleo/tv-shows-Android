@@ -92,9 +92,8 @@ class LoginFragment: Fragment() {
             }
         }
         binding.loginButton.setOnClickListener {
-            //TODO Not implemented!
-            //val action = FirstFragmentDirections.actionFirstToSecond(9)
-            //findNavController().navigate(action)
+            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString())
+            findNavController().navigate(R.id.action_login_to_shows)
         }
     }
 
