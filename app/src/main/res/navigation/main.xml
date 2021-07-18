@@ -31,13 +31,13 @@
         <action
             android:id="@+id/action_shows_to_login"
             app:destination="@id/login_fragment"
-            app:popUpTo="@id/login_fragment"/>
+            app:popUpTo="@id/login_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/show_details_fragment"
         android:name="com.rayofdoom.shows_leo.ShowDetailsFragment"
-        tools:layout="@layout/activity_show_details">
+        tools:layout="@layout/fragment_show_details">
 
         <argument
             android:name="username"
@@ -49,18 +49,17 @@
 
         <argument
             android:name="show_description_res_id"
-            app:argType="integer"/>
+            app:argType="integer" />
 
         <argument
             android:name="show_image_res_id"
-            app:argType="integer"
-            />
+            app:argType="integer" />
 
 
         <action
             android:id="@+id/action_show_details_to_shows"
             app:destination="@id/shows_fragment"
-            app:popUpTo="@id/shows_fragment"/>
+            app:popUpTo="@id/shows_fragment" />
 
     </fragment>
 

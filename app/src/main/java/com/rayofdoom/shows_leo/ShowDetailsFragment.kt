@@ -29,13 +29,6 @@ class ShowDetailsFragment : Fragment() {
     private val reviews: MutableList<Review> = fillReviewData()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-//    private val username = args.username
-//    private val showTitle = args.showTitle
-//    @StringRes
-//    private val showDescription = args.showDescriptionResId
-//    @DrawableRes
-//    private val showImage = args.showImageResId
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,10 +41,6 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.root.setOnClickListener {
-            //val action = FirstFragmentDirections.actionFirstToSecond(9)
-            //findNavController().navigate(action)
-        }
 
         binding.apply {
             showDetailsDescription.setText(args.showDescriptionResId)
@@ -61,7 +50,7 @@ class ShowDetailsFragment : Fragment() {
         }
 
         binding.backButton.setOnClickListener {
-            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also{
+            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
                 findNavController().navigate(it)
             }
         }

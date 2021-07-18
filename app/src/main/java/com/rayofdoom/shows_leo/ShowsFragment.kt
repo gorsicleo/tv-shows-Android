@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 
-class ShowsFragment: Fragment() {
+class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
@@ -42,7 +42,7 @@ class ShowsFragment: Fragment() {
         }
 
         binding.logOutButton.setOnClickListener {
-            ShowsFragmentDirections.actionShowsToLogin().also{
+            ShowsFragmentDirections.actionShowsToLogin().also {
                 findNavController().navigate(it)
             }
         }
@@ -53,7 +53,12 @@ class ShowsFragment: Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
-            ShowsFragmentDirections.actionShowsToShowsDetails(args.username,show.showTitle,show.showDescription,show.imageResource).also{
+            ShowsFragmentDirections.actionShowsToShowsDetails(
+                args.username,
+                show.showTitle,
+                show.showDescription,
+                show.imageResource
+            ).also {
                 findNavController().navigate(it)
             }
         }
