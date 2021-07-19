@@ -43,19 +43,20 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            showDetailsDescription.setText(args.showDescriptionResId)
-            showDetailsImage.setImageResource(args.showImageResId)
+            showDetailsDescription?.setText(args.showDescriptionResId)
+            showDetailsImage?.setImageResource(args.showImageResId)
 
-            collapsingToolbar.title = args.showTitle
+            collapsingToolbar?.title = args.showTitle
+            showDetailsTitle?.text = args.showTitle
         }
 
-        binding.backButton.setOnClickListener {
+        binding.backButton?.setOnClickListener {
             ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
                 findNavController().navigate(it)
             }
         }
 
-        binding.buttonWriteReview.setOnClickListener {
+        binding.buttonWriteReview?.setOnClickListener {
             showBottomSheet()
         }
 
@@ -63,11 +64,11 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        binding.reviewsRecycler.layoutManager =
+        binding.reviewsRecycler?.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter = ItemReviewAdapter(reviews)
         displayAverage()
-        binding.reviewsRecycler.adapter = reviewsAdapter
+        binding.reviewsRecycler?.adapter = reviewsAdapter
     }
 
     private fun showBottomSheet() {
@@ -113,9 +114,9 @@ class ShowDetailsFragment : Fragment() {
 
     private fun displayAverage() {
         val showRatingData = reviews.getCumulativeRatingForShow()
-        binding.showDetailsReviewData.text =
+        binding.showDetailsReviewData?.text =
             "${showRatingData.numberOfReviews} REVIEWS, ${showRatingData.averageScore.round()} AVERAGE"
-        binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
+        binding.showDetailsRatingBar?.rating = showRatingData.averageScore.toFloat()
     }
 
 

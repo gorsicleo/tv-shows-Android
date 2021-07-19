@@ -1,5 +1,7 @@
 package com.rayofdoom.shows_leo
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 
@@ -33,6 +36,17 @@ class ShowsFragment : Fragment() {
         binding.noShowsLayout.visibility = View.INVISIBLE
         binding.showsRecycler.visibility = View.VISIBLE
 
+//        if (isTablet(requireContext())) {
+//            binding.apply {
+//                showDetailsImage?.setImageResource(shows[1].imageResource)
+//                showDetailsDescription?.setText(shows[1].showDescription)
+//
+//
+//            }
+//
+//
+//        }
+
 
         initRecyclerView()
         binding.clearButton.setOnClickListener {
@@ -48,24 +62,38 @@ class ShowsFragment : Fragment() {
         }
     }
 
+    private fun isTablet(context: Context): Boolean {
+        return ((context.resources.configuration.screenLayout
+                and Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
+    }
+
     private fun initRecyclerView() {
+
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
-            ShowsFragmentDirections.actionShowsToShowsDetails(
-                args.username,
-                show.showTitle,
-                show.showDescription,
-                show.imageResource
-            ).also {
-                findNavController().navigate(it)
-            }
-        }
+//            if (!isTablet(requireContext())) {
+                ShowsFragmentDirections.actionShowsToShowsDetails(
+                    args.username,
+                    show.showTitle,
+                    show.showDescription,
+                    show.imageResource
+                ).also {
+                    findNavController().navigate(it)
+                }
+            } /*else {
+                binding.apply {
+                    showDetailsDescription?.setText(show.showDescription)
+                    showDetailsImage?.setImageResource(show.imageResource)
+                }
+           } }*/
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
+        }
     }
-}
