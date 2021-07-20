@@ -30,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         //this is used to disable button when app starts
         binding.loginButton.isEnabled = false
-        binding.passwordContainer.boxStrokeColor = getColor(R.color.white)
         textListenersInit()
     }
 

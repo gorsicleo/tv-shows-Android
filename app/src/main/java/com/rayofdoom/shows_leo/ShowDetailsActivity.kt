@@ -12,14 +12,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.databinding.ActivityShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.model.Review
-import com.rayofdoom.shows_leo.utility_functions.fillReviewData
+import com.rayofdoom.shows_leo.utility_functions.ReviewDataResource
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
-import com.rayofdoom.shows_leo.utility_functions.round
 
 class ShowDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowDetailsBinding
     private var reviewsAdapter: ItemReviewAdapter? = null
-    private val reviews: MutableList<Review> = fillReviewData()
+    private val reviews: MutableList<Review> = ReviewDataResource.reviewData
 
 
     companion object {
@@ -51,32 +50,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityShowDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-        binding.apply {
-            showDetailsDescription.setText(intent.getIntExtra(EXTRA_SHOW_DESCRIPTION, -1))
-            showDetailsImage.setImageResource(
-                intent.getIntExtra(
-                    EXTRA_SHOW_IMAGE_ID,
-                    R.drawable.kt2
-                )
-            )
-            collapsingToolbar.title = intent.getStringExtra(EXTRA_SHOW_TITLE)
-        }
-
-        binding.backButton.setOnClickListener {
-            startActivity(
-                ShowsActivity.buildIntent(
-                    this,
-                    intent.getStringExtra(EXTRA_USERNAME).toString()
-                )
-            )
-        }
-
-        binding.buttonWriteReview.setOnClickListener {
-            showBottomSheet()
-        }
-
+        initView()
         initRecyclerView()
     }
 
@@ -100,7 +74,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         dialog.show()
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toDouble() == 0.0) {
-                Toast.makeText(this, "You must enter score to submit a review!", Toast.LENGTH_SHORT)
+                Toast.makeText(this, getString(R.string.toast_message_no_score), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 reviews.add(
@@ -127,8 +101,38 @@ class ShowDetailsActivity : AppCompatActivity() {
     private fun displayAverage() {
         val showRatingData = reviews.getCumulativeRatingForShow()
         binding.showDetailsReviewData.text =
-            "${showRatingData.numberOfReviews} REVIEWS, ${showRatingData.averageScore.round()} AVERAGE"
+            getString(
+                R.string.display_average_format,
+                showRatingData.numberOfReviews,
+                showRatingData.averageScore
+            )
         binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
+    }
+
+    private fun initView() {
+        binding.apply {
+            showDetailsDescription.setText(intent.getIntExtra(EXTRA_SHOW_DESCRIPTION, -1))
+            showDetailsImage.setImageResource(
+                intent.getIntExtra(
+                    EXTRA_SHOW_IMAGE_ID,
+                    R.drawable.kt2
+                )
+            )
+            collapsingToolbar.title = intent.getStringExtra(EXTRA_SHOW_TITLE)
+
+            backButton.setOnClickListener {
+                startActivity(
+                    ShowsActivity.buildIntent(
+                        this@ShowDetailsActivity,
+                        intent.getStringExtra(EXTRA_USERNAME).toString()
+                    )
+                )
+            }
+
+            buttonWriteReview.setOnClickListener {
+                showBottomSheet()
+            }
+        }
     }
 
 

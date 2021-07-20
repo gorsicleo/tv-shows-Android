@@ -9,12 +9,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rayofdoom.shows_leo.databinding.ActivityShowsBinding
-import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import com.rayofdoom.shows_leo.utility_functions.ShowDataResource
 
 class ShowsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityShowsBinding
-    private val shows = fillShowsData()
+    private val shows = ShowDataResource.showData
 
     companion object {
         private const val EXTRA_USERNAME = "EXTRA_USERNAME"
@@ -31,17 +31,15 @@ class ShowsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityShowsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.noShowsLayout.visibility = View.INVISIBLE
-        binding.showsRecycler.visibility = View.VISIBLE
 
 
         initRecyclerView()
         binding.clearButton.setOnClickListener {
             Toast.makeText(this, "Show list cleared", Toast.LENGTH_SHORT).show()
-            binding.showsRecycler.visibility = View.INVISIBLE
-            binding.noShowsLayout.visibility = View.VISIBLE
-        }
-        binding.backButton.apply {
+            binding.apply {
+                showsRecycler.visibility = View.INVISIBLE
+                noShowsLayout.visibility = View.VISIBLE
+            }
 
         }
 

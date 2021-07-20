@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.rayofdoom.shows_leo.databinding.ActivityWelcomeBinding
 
 private const val EMAIL_USERNAME_SEPARATOR = "@"
+private const val WELCOME_SCREEN_DURATION: Long = 1500
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -48,7 +49,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun makeIntent() {
         //this is used to shortly display welcome message to the user before making intent
-        Thread.sleep(1500)
+        Thread.sleep(WELCOME_SCREEN_DURATION)
         intent = ShowsActivity.buildIntent(this, intent.getStringExtra(EXTRA_USERNAME).toString())
         startActivity(intent)
     }

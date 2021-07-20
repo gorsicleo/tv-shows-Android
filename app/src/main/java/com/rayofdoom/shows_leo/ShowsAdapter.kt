@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rayofdoom.shows_leo.databinding.ViewShowItemBinding
 import com.rayofdoom.shows_leo.model.Show
 
-class ShowsAdapter (
+class ShowsAdapter(
     private var items: List<Show>,
     private val onClickCallback: (Show) -> Unit
-        ): RecyclerView.Adapter<ShowsAdapter.ShowsViewHolder>() {
+) : RecyclerView.Adapter<ShowsAdapter.ShowsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowsViewHolder {
         val binding = ViewShowItemBinding.inflate(LayoutInflater.from(parent.context))
@@ -25,14 +25,18 @@ class ShowsAdapter (
     }
 
 
-    inner class ShowsViewHolder(private val binding:ViewShowItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Show){
-            binding.showTitle.text = item.showTitle
-            binding.showDescription.text = itemView.context.getString(item.showDescription)
-            binding.showImage.setImageResource(item.imageResource)
-            binding.root.setOnClickListener{
-                onClickCallback(item)
+    inner class ShowsViewHolder(private val binding: ViewShowItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Show) {
+            binding.apply {
+                showTitle.text = item.showTitle
+                showDescription.text = itemView.context.getString(item.showDescription)
+                showImage.setImageResource(item.imageResource)
+                root.setOnClickListener {
+                    onClickCallback(item)
+                }
             }
+
         }
     }
 
