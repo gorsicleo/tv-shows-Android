@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowsLeo">
+        <activity android:name=".ShowDetailsActivity"></activity>
+        <activity android:name=".ShowsActivity" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

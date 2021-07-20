@@ -1,5 +1,7 @@
 package com.rayofdoom.shows_leo
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.rayofdoom.shows_leo.databinding.ActivityLoginBinding
@@ -14,6 +16,12 @@ class LoginActivity : AppCompatActivity() {
     private var conditionPass = false
 
     private lateinit var binding: ActivityLoginBinding
+
+    companion object {
+        fun buildIntent(activity: Activity): Intent {
+            return Intent(activity, LoginActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
