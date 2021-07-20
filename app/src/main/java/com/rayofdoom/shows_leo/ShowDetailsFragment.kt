@@ -34,7 +34,7 @@ class ShowDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShowDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,8 +43,8 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            showDetailsDescription?.setText(args.showDescriptionResId)
-            showDetailsImage?.setImageResource(args.showImageResId)
+            showDetailsDescription.setText(args.showDescriptionResId)
+            showDetailsImage.setImageResource(args.showImageResId)
 
             collapsingToolbar?.title = args.showTitle
             showDetailsTitle?.text = args.showTitle
@@ -56,7 +56,7 @@ class ShowDetailsFragment : Fragment() {
             }
         }
 
-        binding.buttonWriteReview?.setOnClickListener {
+        binding.buttonWriteReview.setOnClickListener {
             showBottomSheet()
         }
 
@@ -64,11 +64,11 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        binding.reviewsRecycler?.layoutManager =
+        binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter = ItemReviewAdapter(reviews)
         displayAverage()
-        binding.reviewsRecycler?.adapter = reviewsAdapter
+        binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
     private fun showBottomSheet() {
