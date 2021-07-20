@@ -36,16 +36,6 @@ class ShowsFragment : Fragment() {
         binding.noShowsLayout.visibility = View.INVISIBLE
         binding.showsRecycler.visibility = View.VISIBLE
 
-//        if (isTablet(requireContext())) {
-//            binding.apply {
-//                showDetailsImage?.setImageResource(shows[1].imageResource)
-//                showDetailsDescription?.setText(shows[1].showDescription)
-//
-//
-//            }
-//
-//
-//        }
 
 
         initRecyclerView()
@@ -74,7 +64,6 @@ class ShowsFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
-//            if (!isTablet(requireContext())) {
                 ShowsFragmentDirections.actionShowsToShowsDetails(
                     args.username,
                     show.showTitle,
@@ -83,13 +72,7 @@ class ShowsFragment : Fragment() {
                 ).also {
                     findNavController().navigate(it)
                 }
-            } /*else {
-                binding.apply {
-                    showDetailsDescription?.setText(show.showDescription)
-                    showDetailsImage?.setImageResource(show.imageResource)
-                }
-           } }*/
-
+            }
     }
 
         override fun onDestroyView() {

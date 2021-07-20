@@ -10,9 +10,9 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fitsSystemWindows="true"
         app:layout_constraintHeight_percent="0.18"
-        app:layout_constraintTop_toTopOf="parent"
-        android:fitsSystemWindows="true">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -99,127 +99,43 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/toolbar_container">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.3"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/shows_recycler"
-            android:layout_width="match_parent"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            tools:listitem="@layout/view_show_item" />
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.3">
 
-    </androidx.core.widget.NestedScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/shows_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/view_show_item" />
 
-<!--        <androidx.core.widget.NestedScrollView-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:layout_constraintWidth_percent="0.7"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
+        </androidx.core.widget.NestedScrollView>
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="">-->
-
-<!--                </TextView>-->
-
-<!--                <androidx.cardview.widget.CardView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="500dp"-->
-<!--                    android:layout_marginHorizontal="24dp"-->
-<!--                    app:cardCornerRadius="16dp">-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/show_details_image"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:scaleType="centerCrop"-->
-<!--                        tools:src="@drawable/krv_nije_voda_1" />-->
-<!--                </androidx.cardview.widget.CardView>-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/show_details_description"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginHorizontal="24dp"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:layout_marginBottom="29dp"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="16sp"-->
-<!--                    tools:text="@string/krv_nije_voda_description" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="24dp"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="24sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    tools:text="Reviews" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/show_details_review_data"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginHorizontal="24dp"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:layout_marginBottom="4dp"-->
-<!--                    android:textSize="14sp"-->
-<!--                    tools:text="3 REVIEWS, 3.63 AVERAGE" />-->
-
-
-<!--                <RatingBar-->
-<!--                    android:id="@+id/show_details_rating_bar"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginHorizontal="16dp"-->
-<!--                    android:theme="@style/rating_bar_style"-->
-<!--                    tools:rating="3.5" />-->
-
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/reviews_recycler"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginHorizontal="16dp"-->
-<!--                    android:layout_marginBottom="70dp"-->
-<!--                    tools:listitem="@layout/item_review" />-->
-
-
-<!--            </LinearLayout>-->
-<!--        </androidx.core.widget.NestedScrollView>-->
         <fragment
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintWidth_percent="0.7"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
             android:name="com.rayofdoom.shows_leo.ShowDetailsFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7"
             tools:layout="@layout/fragment_show_details" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.7"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/white">
+        app:layout_constraintWidth_percent="0.7">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_write_review"
