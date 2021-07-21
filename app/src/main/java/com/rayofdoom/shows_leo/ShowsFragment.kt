@@ -1,8 +1,11 @@
 package com.rayofdoom.shows_leo
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +21,8 @@ import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
+import java.util.jar.Manifest
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
@@ -28,6 +33,9 @@ class ShowsFragment : Fragment() {
     private val args: ShowsFragmentArgs by navArgs()
 
     private val shows = fillShowsData()
+    private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
+        dispatchTakePictureIntent()
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,6 +103,17 @@ class ShowsFragment : Fragment() {
         _binding = null
     }
 
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        } catch (e: ActivityNotFoundException) {
+            // display error state to the user
+        }
+    }
+
     private fun showBottomSheet() {
         val dialog = BottomSheetDialog(requireContext())
         val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
@@ -114,6 +133,10 @@ class ShowsFragment : Fragment() {
                         findNavController().navigate(ShowsFragmentDirections.actionShowsToLogin())
                     }
                 }
+            }
+
+            userPanelChangeProfilePhotoButton.setOnClickListener {
+                    cameraPermissionForPhoto.launch(arrayOf(android.Manifest.permission.CAMERA))
             }
         }
 
