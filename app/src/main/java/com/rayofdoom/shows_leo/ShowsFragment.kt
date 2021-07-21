@@ -11,8 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
+import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
+import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
@@ -49,14 +53,12 @@ class ShowsFragment : Fragment() {
         }
 
         binding.logOutButton.setOnClickListener {
-            ShowsFragmentDirections.actionShowsToLogin().also {
-                findNavController().navigate(it)
-            }
+            showBottomSheet()
         }
 
         val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
 
-        with (sharedPrefs.edit()){
+        with(sharedPrefs.edit()) {
             if (args.rememberMeChecked) {
                 putBoolean(LOGIN_PASSED_FLAG, true)
                 putString(USERNAME, args.username)
@@ -77,19 +79,46 @@ class ShowsFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
-                ShowsFragmentDirections.actionShowsToShowsDetails(
-                    args.username,
-                    show.showTitle,
-                    show.showDescription,
-                    show.imageResource
-                ).also {
-                    findNavController().navigate(it)
-                }
+            ShowsFragmentDirections.actionShowsToShowsDetails(
+                args.username,
+                show.showTitle,
+                show.showDescription,
+                show.imageResource
+            ).also {
+                findNavController().navigate(it)
             }
-    }
-
-        override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun showBottomSheet() {
+        val dialog = BottomSheetDialog(requireContext())
+        val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialogBinding.apply {
+            userPanelEmail.text=args.username
+            userPanelPhoto.setImageResource(R.drawable.ic_profile_placeholder)
+            userPanelLogoutButton.setOnClickListener{
+                val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+                with(sharedPrefs.edit()) {
+                    if (args.rememberMeChecked) {
+                        putBoolean(LOGIN_PASSED_FLAG, false)
+                        putString(USERNAME, null)
+                        apply()
+                        dialog.dismiss()
+                        findNavController().navigate(ShowsFragmentDirections.actionShowsToLogin())
+                    }
+                }
+            }
+        }
+
+
+        dialog.show()
+
+    }
+}
