@@ -1,5 +1,6 @@
 package com.rayofdoom.shows_leo
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import com.rayofdoom.shows_leo.utility_functions.addTextChangedValidator
 private const val AT_SYMBOL = "@"
 private const val EMAIL_MINIMUM_LENGTH = 2
 private const val PASSWORD_MINIMUM_LENGTH = 6
+private const val LOGIN_PASSED_FLAG = "passedLogin"
+private const val USERNAME = "username"
 
 class LoginFragment: Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -35,6 +38,14 @@ class LoginFragment: Fragment() {
         binding.loginButton.isEnabled = false
         binding.passwordContainer.boxStrokeColor = getColor(requireActivity().applicationContext,R.color.white)
         textListenersInit()
+
+        val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val userRegistered = prefs.getBoolean(LOGIN_PASSED_FLAG,false)
+        if (userRegistered) {
+            val action = LoginFragmentDirections.actionLoginToShows(prefs.getString(USERNAME,
+                USERNAME)!!,true)
+            findNavController().navigate(action)
+        }
 
     }
 
@@ -92,7 +103,7 @@ class LoginFragment: Fragment() {
             }
         }
         binding.loginButton.setOnClickListener {
-            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString()).also{
+            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString(),binding.rememberMeCheckbox.isChecked).also{
                 findNavController().navigate(it)
             }
 

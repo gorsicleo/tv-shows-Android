@@ -25,6 +25,10 @@
             app:argType="string"
             />
 
+        <argument
+            android:name="remember_me_checked"
+            app:argType="boolean"/>
+
         <action
             android:id="@+id/action_shows_to_shows_details"
             app:destination="@id/show_details_fragment"

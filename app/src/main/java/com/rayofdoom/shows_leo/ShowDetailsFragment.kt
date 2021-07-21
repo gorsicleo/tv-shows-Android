@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -51,7 +49,7 @@ class ShowDetailsFragment : Fragment() {
         }
 
         binding.backButton?.setOnClickListener {
-            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
+            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username,false).also {
                 findNavController().navigate(it)
             }
         }
@@ -114,9 +112,9 @@ class ShowDetailsFragment : Fragment() {
 
     private fun displayAverage() {
         val showRatingData = reviews.getCumulativeRatingForShow()
-        binding.showDetailsReviewData?.text =
+        binding.showDetailsReviewData.text =
             "${showRatingData.numberOfReviews} REVIEWS, ${showRatingData.averageScore.round()} AVERAGE"
-        binding.showDetailsRatingBar?.rating = showRatingData.averageScore.toFloat()
+        binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
     }
 
 

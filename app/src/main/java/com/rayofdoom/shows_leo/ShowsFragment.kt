@@ -15,6 +15,9 @@ import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 
+private const val LOGIN_PASSED_FLAG = "passedLogin"
+private const val USERNAME = "username"
+
 class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
@@ -48,6 +51,16 @@ class ShowsFragment : Fragment() {
         binding.logOutButton.setOnClickListener {
             ShowsFragmentDirections.actionShowsToLogin().also {
                 findNavController().navigate(it)
+            }
+        }
+
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+
+        with (sharedPrefs.edit()){
+            if (args.rememberMeChecked) {
+                putBoolean(LOGIN_PASSED_FLAG, true)
+                putString(USERNAME, args.username)
+                apply()
             }
         }
     }
