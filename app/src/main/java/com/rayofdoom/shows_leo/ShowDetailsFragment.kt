@@ -84,7 +84,7 @@ class ShowDetailsFragment : Fragment() {
     private fun initRecyclerView(reviews: List<Review>) {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        reviewsAdapter = ItemReviewAdapter(reviews)
+        reviewsAdapter = ItemReviewAdapter(reviews,args.username.parseUsernameFromEmail(),requireContext())
         displayAverage(reviews)
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
