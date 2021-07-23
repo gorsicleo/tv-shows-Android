@@ -17,7 +17,7 @@ private const val PASSWORD_MINIMUM_LENGTH = 6
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
 
-class LoginFragment: Fragment() {
+class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -28,7 +28,7 @@ class LoginFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,7 +36,8 @@ class LoginFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.loginButton.isEnabled = false
-        binding.passwordContainer.boxStrokeColor = getColor(requireActivity().applicationContext,R.color.white)
+        binding.passwordContainer.boxStrokeColor =
+            getColor(requireActivity().applicationContext, R.color.white)
         textListenersInit()
 
         val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return

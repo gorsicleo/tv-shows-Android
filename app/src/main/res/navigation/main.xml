@@ -12,7 +12,9 @@
 
         <action
             android:id="@+id/action_login_to_shows"
-            app:destination="@id/shows_fragment" />
+            app:destination="@id/shows_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -52,15 +54,7 @@
             app:argType="string" />
 
         <argument
-            android:name="show_title"
-            app:argType="string" />
-
-        <argument
-            android:name="show_description_res_id"
-            app:argType="integer" />
-
-        <argument
-            android:name="show_image_res_id"
+            android:name="show_id"
             app:argType="integer" />
 
 

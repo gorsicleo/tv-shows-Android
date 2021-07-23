@@ -3,14 +3,19 @@ package com.rayofdoom.shows_leo.utility_functions
 import com.rayofdoom.shows_leo.model.CumulativeRatingForShow
 import com.rayofdoom.shows_leo.model.Review
 
-fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+private const val EMAIL_USERNAME_SEPARATOR = "@"
 
-fun List<Review>.getCumulativeRatingForShow():CumulativeRatingForShow{
-    var sum = 0.0
-    var count = 0
-    this.forEach {
-        sum += it.userRating
-        count++
+
+fun List<Review>.getCumulativeRatingForShow(): CumulativeRatingForShow {
+    return if (this.isEmpty()) {
+        CumulativeRatingForShow(this.size, 0.0)
+    } else {
+        val average = this.map { review -> review.userRating }.average()
+        CumulativeRatingForShow(this.size, average)
     }
-    return CumulativeRatingForShow(count, (sum/count))
+}
+
+
+fun String.parseUsernameFromEmail(): String {
+    return this.subSequence(0, this.indexOf(EMAIL_USERNAME_SEPARATOR)).toString()
 }

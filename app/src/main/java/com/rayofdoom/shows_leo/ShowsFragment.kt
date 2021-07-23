@@ -59,24 +59,30 @@ class ShowsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShowsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.noShowsLayout.isVisible = false
-        binding.showsRecycler.isVisible = true
         viewModel.initShows()
         viewModel.getShowsLiveData().observe(this.viewLifecycleOwner,{ shows ->
             initRecyclerView(shows)
         })
 
-        binding.clearButton.setOnClickListener {
-            Toast.makeText(context, "Show list cleared", Toast.LENGTH_SHORT).show()
-            binding.showsRecycler.isVisible = false
-            binding.noShowsLayout.isVisible = true
+
+        initRecyclerView()
+        binding.clearSwitch?.setOnClickListener {
+            if (binding.clearSwitch!!.isChecked) {
+                Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
+                    .show()
+                binding.showsRecycler.visibility = View.INVISIBLE
+                binding.noShowsLayout.visibility = View.VISIBLE
+            } else {
+                binding.showsRecycler.visibility = View.VISIBLE
+                binding.noShowsLayout.visibility = View.INVISIBLE
+            }
         }
 
         binding.logOutButton.setOnClickListener {
@@ -94,6 +100,11 @@ class ShowsFragment : Fragment() {
         }
     }
 
+    private fun isTablet(context: Context): Boolean {
+        return ((context.resources.configuration.screenLayout
+                and Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
+    }
 
     private fun initRecyclerView(shows: List<Show>) {
 
@@ -103,9 +114,7 @@ class ShowsFragment : Fragment() {
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,
-                show.showTitle,
-                show.showDescription,
-                show.imageResource
+                show.showId
             ).also {
                 findNavController().navigate(it)
             }
