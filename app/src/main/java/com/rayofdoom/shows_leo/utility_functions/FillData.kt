@@ -18,7 +18,7 @@ fun fillReviewData(): MutableList<Review>{
 }
 
 fun fillShowsData(): List<Show>{
-    return listOf(
+    return mutableListOf(
         Show("Krim tim 2", R.string.krim_tim_2_description, R.drawable.kt2),
         Show("Krv nije voda", R.string.krv_nije_voda_description, R.drawable.krv_nije_voda_1),
         Show("Sudnica", R.string.sudnica_description, R.drawable.sudnica),
