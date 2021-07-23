@@ -1,41 +1,29 @@
 package com.rayofdoom.shows_leo
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Camera
-import android.hardware.camera2.CameraDevice
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
-import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
-import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
 import java.io.File
 import java.io.IOException
-import java.util.jar.Manifest
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
@@ -45,13 +33,18 @@ class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
+    private val shows = fillShowsData()
 
 
     private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
         takePicture()
     })
 
-    private val cameraContract = ActivityResultContracts.TakePicture()
+    private val cameraContract = registerForActivityResult(ActivityResultContracts.TakePicture()){ success ->
+        if (success) {
+            setProfilePhoto()
+        }
+    }
 
     private val viewModel: ShowsViewModel by viewModels()
 
@@ -72,7 +65,7 @@ class ShowsFragment : Fragment() {
         })
 
 
-        initRecyclerView()
+        initRecyclerView(shows)
         binding.clearSwitch?.setOnClickListener {
             if (binding.clearSwitch!!.isChecked) {
                 Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
@@ -100,11 +93,6 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    private fun isTablet(context: Context): Boolean {
-        return ((context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
-    }
 
     private fun initRecyclerView(shows: List<Show>) {
 
@@ -143,7 +131,7 @@ class ShowsFragment : Fragment() {
                             "${requireContext().applicationContext.packageName}.fileprovider",
                             photo
                         )
-                        cameraContract.
+                        cameraContract.launch(photoURI)
                     }
                 }
 

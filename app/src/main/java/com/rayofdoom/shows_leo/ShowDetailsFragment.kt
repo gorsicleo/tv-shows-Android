@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
-import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
 import com.rayofdoom.shows_leo.utility_functions.getShowById
@@ -29,10 +25,9 @@ class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private var reviewsAdapter: ItemReviewAdapter? = null
-    private var reviews: MutableList<Review> = emptyList<Review>().toMutableList()
+    private val reviews: MutableList<Review> = fillReviewData()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-    private val viewModel: ShowDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +37,6 @@ class ShowDetailsFragment : Fragment() {
         _binding = FragmentShowDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,34 +50,23 @@ class ShowDetailsFragment : Fragment() {
         }
 
         binding.backButton?.setOnClickListener {
-            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
+            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username,false).also {
                 findNavController().navigate(it)
             }
         }
 
-            /*binding.clearSwitch?.setOnClickListener {
-                if (clearSwitch.isChecked) {
-                    reviews = fillReviewData()
-                    initRecyclerView()
-                } else {
-                    reviews.clear()
-                    initRecyclerView()
-                }
-            }*/
-
+        binding.buttonWriteReview.setOnClickListener {
+            showBottomSheet()
         }
-        viewModel.initReviews()
-        viewModel.getReviewsLiveData().observe(this.viewLifecycleOwner,{ reviews ->
-            initRecyclerView(reviews)
-            displayAverage(reviews)
-        })
+
+        initRecyclerView()
     }
 
-    private fun initRecyclerView(reviews: List<Review>) {
+    private fun initRecyclerView() {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter = ItemReviewAdapter(reviews)
-        displayAverage(reviews)
+        displayAverage()
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
@@ -92,18 +75,22 @@ class ShowDetailsFragment : Fragment() {
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
+        dialogBinding.addReviewButton.setOnClickListener {
+            Toast.makeText(context, dialogBinding.reviewInput.text, Toast.LENGTH_SHORT)
+                .show()
+        }
 
         dialog.show()
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toDouble() == 0.0) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.toast_message_no_score),
+                    "You must enter score to submit a review!",
                     Toast.LENGTH_SHORT
                 )
                     .show()
             } else {
-                viewModel.addReview(
+                reviews.add(
                     Review(
                         args.username.parseUsernameFromEmail(),
                         dialogBinding.reviewInput.text.toString(),
@@ -111,18 +98,22 @@ class ShowDetailsFragment : Fragment() {
                         dialogBinding.rating.rating.toInt()
                     )
                 )
+                reviewsAdapter?.addItem(reviews)
+                displayAverage()
                 dialog.dismiss()
             }
+
         }
     }
 
-    private fun displayAverage(reviews: List<Review>) {
+    private fun displayAverage() {
         val showRatingData = reviews.getCumulativeRatingForShow()
-        binding.showDetailsReviewData.text = getString(
-            R.string.display_average_format,
-            showRatingData.numberOfReviews,
-            showRatingData.averageScore
-        )
+        binding.showDetailsReviewData.text =
+            getString(
+                R.string.display_average_format,
+                showRatingData.numberOfReviews,
+                showRatingData.averageScore
+            )
         binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
     }
 
@@ -131,5 +122,4 @@ class ShowDetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
