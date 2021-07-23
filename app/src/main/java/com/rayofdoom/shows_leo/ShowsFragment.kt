@@ -1,7 +1,6 @@
 package com.rayofdoom.shows_leo
 
 import android.content.Context
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,19 +14,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
+import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
 import java.io.File
 import java.io.IOException
 
+
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
-private const val REQUEST_IMAGE_CAPTURE = 1
 
 class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
@@ -40,11 +42,18 @@ class ShowsFragment : Fragment() {
         takePicture()
     })
 
-    private val cameraContract = registerForActivityResult(ActivityResultContracts.TakePicture()){ success ->
-        if (success) {
-            setProfilePhoto()
+
+    private val cameraContract =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
+
+                dialogBinding.userPanelPhoto.displayAvatar(requireContext())
+                binding.logOutButton.displayAvatar(requireContext())
+            }
+
         }
-    }
+
 
     private val viewModel: ShowsViewModel by viewModels()
 
@@ -60,12 +69,22 @@ class ShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initShows()
-        viewModel.getShowsLiveData().observe(this.viewLifecycleOwner,{ shows ->
+        viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
             initRecyclerView(shows)
         })
 
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+
+        with(sharedPrefs.edit()) {
+            if (args.rememberMeChecked) {
+                putBoolean(LOGIN_PASSED_FLAG, true)
+                putString(USERNAME, args.username)
+                apply()
+            }
+        }
 
         initRecyclerView(shows)
+
         binding.clearSwitch?.setOnClickListener {
             if (binding.clearSwitch!!.isChecked) {
                 Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
@@ -78,19 +97,12 @@ class ShowsFragment : Fragment() {
             }
         }
 
+        binding.logOutButton.displayAvatar(requireContext())
+
         binding.logOutButton.setOnClickListener {
             showBottomSheet()
         }
 
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-
-        with(sharedPrefs.edit()) {
-            if (args.rememberMeChecked) {
-                putBoolean(LOGIN_PASSED_FLAG, true)
-                putString(USERNAME, args.username)
-                apply()
-            }
-        }
     }
 
 
@@ -115,28 +127,26 @@ class ShowsFragment : Fragment() {
     }
 
 
-
-
     private fun takePicture() {
-                    val photoFile: File? = try {
-                        FileUtil.createImageFile(requireContext())
-                    } catch (ex: IOException) {
-                        // Error occurred while creating the File
-                        null
-                    }
-                    // Continue only if the File was successfully created
-                    photoFile?.also {photo ->
-                        val photoURI: Uri = FileProvider.getUriForFile(
-                            requireContext(),
-                            "${requireContext().applicationContext.packageName}.fileprovider",
-                            photo
-                        )
-                        cameraContract.launch(photoURI)
-                    }
-                }
+        val photoFile: File? = try {
+            FileUtil.createImageFile(requireContext())
+        } catch (ex: IOException) {
+            // Error occurred while creating the File
+            null
+        }
+        // Continue only if the File was successfully created
+        photoFile?.also { photo ->
+            context?.apply {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "${this.applicationContext.packageName}.fileprovider",
+                    photo
+                )
+                cameraContract.launch(photoURI)
+            }
 
-
-
+        }
+    }
 
 
     private fun showBottomSheet() {
@@ -145,10 +155,14 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(dialogBinding.root)
 
         dialogBinding.apply {
-            userPanelEmail.text=args.username
-            userPanelPhoto.setImageResource(R.drawable.ic_profile_placeholder)
-            userPanelLogoutButton.setOnClickListener{
-                val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            userPanelEmail.text = args.username
+            val avatarExists = dialogBinding.userPanelPhoto.displayAvatar(requireContext())
+            if (!avatarExists){
+                userPanelPhoto.setImageResource(R.drawable.ic_profile_placeholder)
+            }
+            userPanelLogoutButton.setOnClickListener {
+                val sharedPrefs =
+                    activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
                 with(sharedPrefs.edit()) {
                     if (args.rememberMeChecked) {
                         putBoolean(LOGIN_PASSED_FLAG, false)
@@ -161,9 +175,9 @@ class ShowsFragment : Fragment() {
             }
 
             userPanelChangeProfilePhotoButton.setOnClickListener {
-                    cameraPermissionForPhoto.launch(arrayOf(android.Manifest.permission.CAMERA))
-                    //val image = FileUtil.getImageFile(context)
 
+                cameraPermissionForPhoto.launch(arrayOf(android.Manifest.permission.CAMERA))
+                dialog.dismiss()
             }
         }
 
