@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 
-class ShowDetailsViewModel : ViewModel(){
+class ShowDetailsViewModel : ViewModel() {
 
     private var reviews: MutableList<Review> = mutableListOf()
-    private val reviewLiveData : MutableLiveData<List<Review>> by lazy{
+    private val reviewLiveData: MutableLiveData<List<Review>> by lazy {
         MutableLiveData<List<Review>>()
     }
 
-    fun loadDummyReviews(value: Boolean){
-        if (value){
+    fun loadDummyReviews(value: Boolean) {
+        if (value) {
             reviews.addAll(fillReviewData())
             initReviews()
         } else {
@@ -24,15 +24,15 @@ class ShowDetailsViewModel : ViewModel(){
 
     }
 
-    fun getReviewsLiveData(): LiveData<List<Review>>{
+    fun getReviewsLiveData(): LiveData<List<Review>> {
         return reviewLiveData
     }
 
-    fun initReviews(){
+    fun initReviews() {
         reviewLiveData.value = reviews
     }
 
-    fun addReview(review: Review){
+    fun addReview(review: Review) {
         reviews.add(review)
         initReviews()
     }

@@ -41,10 +41,14 @@ class LoginFragment : Fragment() {
         textListenersInit()
 
         val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val userRegistered = prefs.getBoolean(LOGIN_PASSED_FLAG,false)
+        val userRegistered = prefs.getBoolean(LOGIN_PASSED_FLAG, false)
         if (userRegistered) {
-            val action = LoginFragmentDirections.actionLoginToShows(prefs.getString(USERNAME,
-                USERNAME)!!,true)
+            val action = LoginFragmentDirections.actionLoginToShows(
+                prefs.getString(
+                    USERNAME,
+                    USERNAME
+                )!!, true
+            )
             findNavController().navigate(action)
         }
 
@@ -104,7 +108,10 @@ class LoginFragment : Fragment() {
             }
         }
         binding.loginButton.setOnClickListener {
-            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString(),binding.rememberMeCheckbox.isChecked).also{
+            LoginFragmentDirections.actionLoginToShows(
+                binding.emailInput.text.toString(),
+                binding.rememberMeCheckbox.isChecked
+            ).also {
                 findNavController().navigate(it)
             }
 

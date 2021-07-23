@@ -13,11 +13,12 @@ class ShowsViewModel : ViewModel() {
     private val showsLiveData: MutableLiveData<List<Show>> by lazy {
         MutableLiveData<List<Show>>()
     }
-    fun getShowsLiveData(): LiveData<List<Show>>{
+
+    fun getShowsLiveData(): LiveData<List<Show>> {
         return showsLiveData
     }
 
-    fun initShows(){
+    fun initShows() {
         showsLiveData.value = shows
     }
 
