@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
+    android:layout_gravity="bottom"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="25dp">
@@ -29,7 +31,7 @@
         android:id="@+id/review_container"
         style="@style/review_text_input_layout_style"
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="128dp"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
         app:hintTextColor="@color/rating_bar_purple"
