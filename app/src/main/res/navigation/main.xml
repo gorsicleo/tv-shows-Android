@@ -13,7 +13,7 @@
         <action
             android:id="@+id/action_login_to_shows"
             app:destination="@id/shows_fragment"
-            app:popUpTo="@id/shows_fragment"
+            app:popUpTo="@id/login_fragment"
             app:popUpToInclusive="true"/>
     </fragment>
 

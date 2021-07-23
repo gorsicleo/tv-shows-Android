@@ -1,5 +1,7 @@
 package com.rayofdoom.shows_leo
 
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,8 +17,9 @@ class ShowsViewModel : ViewModel() {
         return showsLiveData
     }
 
-    public fun initShows(){
+    fun initShows(){
         showsLiveData.value = shows
     }
 
 }
+

@@ -7,10 +7,21 @@ import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 
 class ShowDetailsViewModel : ViewModel(){
-    //52.19
-    private val reviews = fillReviewData()
+
+    private var reviews: MutableList<Review> = mutableListOf()
     private val reviewLiveData : MutableLiveData<List<Review>> by lazy{
         MutableLiveData<List<Review>>()
+    }
+
+    fun loadDummyReviews(value: Boolean){
+        if (value){
+            reviews.addAll(fillReviewData())
+            initReviews()
+        } else {
+            reviews.removeAll(fillReviewData())
+            initReviews()
+        }
+
     }
 
     fun getReviewsLiveData(): LiveData<List<Review>>{

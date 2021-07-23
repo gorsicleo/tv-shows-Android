@@ -33,6 +33,6 @@ fun fillShowsData(): List<Show> {
     )
 }
 
-fun getShowById(id: Int): Show {
-    return fillShowsData()[id - 1]
-}
+//fun getShowById(id: Int): Show {
+//    return fillShowsData()[id - 1]
+//}
