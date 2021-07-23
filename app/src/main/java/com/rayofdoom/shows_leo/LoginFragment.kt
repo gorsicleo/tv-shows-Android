@@ -14,7 +14,7 @@ private const val AT_SYMBOL = "@"
 private const val EMAIL_MINIMUM_LENGTH = 2
 private const val PASSWORD_MINIMUM_LENGTH = 6
 
-class LoginFragment: Fragment() {
+class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -25,7 +25,7 @@ class LoginFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,7 +33,8 @@ class LoginFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.loginButton.isEnabled = false
-        binding.passwordContainer.boxStrokeColor = getColor(requireActivity().applicationContext,R.color.white)
+        binding.passwordContainer.boxStrokeColor =
+            getColor(requireActivity().applicationContext, R.color.white)
         textListenersInit()
 
     }
@@ -92,7 +93,7 @@ class LoginFragment: Fragment() {
             }
         }
         binding.loginButton.setOnClickListener {
-            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString()).also{
+            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString()).also {
                 findNavController().navigate(it)
             }
 

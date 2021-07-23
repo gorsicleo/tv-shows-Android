@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShowsActivity">
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -39,6 +39,7 @@
                     android:focusable="true"
                     android:src="@drawable/arrow_back"
                     app:layout_collapseMode="pin" />
+
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -80,14 +81,39 @@
                 android:textSize="16sp"
                 tools:text="@string/krv_nije_voda_description" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:text="Reviews" />
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/reviews"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:text="Reviews" />
+
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/clear_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:backgroundTint="@color/white"
+                    android:checked="false"
+                    android:focusable="true"
+                    android:src="@drawable/clear_icon"
+                    android:text="@string/switch_label_reviews"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_collapseMode="pin" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/show_details_review_data"
@@ -113,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="70dp"
+                android:layout_marginBottom="100dp"
                 tools:listitem="@layout/item_review" />
 
 

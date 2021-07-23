@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,16 +15,15 @@ import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
-import com.rayofdoom.shows_leo.utility_functions.round
+import com.rayofdoom.shows_leo.utility_functions.getShowById
+import com.rayofdoom.shows_leo.utility_functions.parseUsernameFromEmail
 
-
-private const val EMAIL_USERNAME_SEPARATOR = "@"
 
 class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private var reviewsAdapter: ItemReviewAdapter? = null
-    private val reviews: MutableList<Review> = fillReviewData()
+    private var reviews: MutableList<Review> = emptyList<Review>().toMutableList()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
 
@@ -41,24 +38,34 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val show = getShowById(args.showId)
         binding.apply {
-            showDetailsDescription.setText(args.showDescriptionResId)
-            showDetailsImage.setImageResource(args.showImageResId)
+            showDetailsDescription.setText(show.showDescription)
+            showDetailsImage.setImageResource(show.imageResource)
 
-            collapsingToolbar?.title = args.showTitle
-            showDetailsTitle?.text = args.showTitle
-        }
-
-        binding.backButton?.setOnClickListener {
-            ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
-                findNavController().navigate(it)
+            collapsingToolbar?.title = show.showTitle
+            showDetailsTitle?.text = show.showTitle
+            buttonWriteReview.setOnClickListener {
+                showBottomSheet()
             }
+            backButton?.setOnClickListener {
+                ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username).also {
+                    findNavController().navigate(it)
+                }
+            }
+
+            clearSwitch?.setOnClickListener {
+                if (clearSwitch.isChecked) {
+                    reviews = fillReviewData()
+                    initRecyclerView()
+                } else {
+                    reviews.clear()
+                    initRecyclerView()
+                }
+            }
+
         }
 
-        binding.buttonWriteReview.setOnClickListener {
-            showBottomSheet()
-        }
 
         initRecyclerView()
     }
@@ -76,29 +83,20 @@ class ShowDetailsFragment : Fragment() {
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
-        dialogBinding.addReviewButton.setOnClickListener {
-            Toast.makeText(context, dialogBinding.reviewInput.text, Toast.LENGTH_SHORT)
-                .show()
-        }
 
         dialog.show()
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toDouble() == 0.0) {
                 Toast.makeText(
                     requireContext(),
-                    "You must enter score to submit a review!",
+                    getString(R.string.toast_message_no_score),
                     Toast.LENGTH_SHORT
                 )
                     .show()
             } else {
                 reviews.add(
                     Review(
-                        args.username
-                            .subSequence(
-                                0,
-                                args.username
-                                    .indexOf(EMAIL_USERNAME_SEPARATOR)
-                            ).toString(),
+                        args.username.parseUsernameFromEmail(),
                         dialogBinding.reviewInput.text.toString(),
                         R.drawable.ic_profile_placeholder,
                         dialogBinding.rating.rating.toInt()
@@ -108,15 +106,17 @@ class ShowDetailsFragment : Fragment() {
                 displayAverage()
                 dialog.dismiss()
             }
-
         }
     }
 
     private fun displayAverage() {
         val showRatingData = reviews.getCumulativeRatingForShow()
-        binding.showDetailsReviewData?.text =
-            "${showRatingData.numberOfReviews} REVIEWS, ${showRatingData.averageScore.round()} AVERAGE"
-        binding.showDetailsRatingBar?.rating = showRatingData.averageScore.toFloat()
+        binding.showDetailsReviewData.text = getString(
+            R.string.display_average_format,
+            showRatingData.numberOfReviews,
+            showRatingData.averageScore
+        )
+        binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
     }
 
 
@@ -124,4 +124,5 @@ class ShowDetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

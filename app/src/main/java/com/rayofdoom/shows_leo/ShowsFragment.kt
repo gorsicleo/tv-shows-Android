@@ -1,7 +1,5 @@
 package com.rayofdoom.shows_leo
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 
@@ -26,23 +23,27 @@ class ShowsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShowsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.noShowsLayout.visibility = View.INVISIBLE
-        binding.showsRecycler.visibility = View.VISIBLE
 
 
 
         initRecyclerView()
-        binding.clearButton.setOnClickListener {
-            Toast.makeText(context, "Show list cleared", Toast.LENGTH_SHORT).show()
-            binding.showsRecycler.visibility = View.INVISIBLE
-            binding.noShowsLayout.visibility = View.VISIBLE
+        binding.clearSwitch?.setOnClickListener {
+            if (binding.clearSwitch!!.isChecked) {
+                Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
+                    .show()
+                binding.showsRecycler.visibility = View.INVISIBLE
+                binding.noShowsLayout.visibility = View.VISIBLE
+            } else {
+                binding.showsRecycler.visibility = View.VISIBLE
+                binding.noShowsLayout.visibility = View.INVISIBLE
+            }
         }
 
         binding.logOutButton.setOnClickListener {
@@ -52,11 +53,6 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    private fun isTablet(context: Context): Boolean {
-        return ((context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
-    }
 
     private fun initRecyclerView() {
 
@@ -64,19 +60,17 @@ class ShowsFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
-                ShowsFragmentDirections.actionShowsToShowsDetails(
-                    args.username,
-                    show.showTitle,
-                    show.showDescription,
-                    show.imageResource
-                ).also {
-                    findNavController().navigate(it)
-                }
+            ShowsFragmentDirections.actionShowsToShowsDetails(
+                args.username,
+                show.showId
+            ).also {
+                findNavController().navigate(it)
             }
-    }
-
-        override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
