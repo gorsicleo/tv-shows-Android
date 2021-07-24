@@ -79,7 +79,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun showBottomSheet() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialog)
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
