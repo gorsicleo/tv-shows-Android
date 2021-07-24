@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Shows-Leo</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="login_message">In order to continue please log in</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
     <string name="shows_title">Shows</string>
     <string name="no_shows_message">Your shows are not showing. Get it? </string>
     <string name="botom_sheet_title">Write a review</string>
