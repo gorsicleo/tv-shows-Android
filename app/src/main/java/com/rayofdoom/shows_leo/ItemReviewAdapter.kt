@@ -41,7 +41,10 @@ class ItemReviewAdapter(
                 itemReviewUserReview.text = review.userReview
                 itemReviewRating.text = review.userRating.toString()
                 if (username == review.userName){
-                    itemReviewUserProfilePicture.displayAvatar(context)
+                    val success = itemReviewUserProfilePicture.displayAvatar(context)
+                    if (!success) {
+                        itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                    }
                 } else {
                     itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
                 }
