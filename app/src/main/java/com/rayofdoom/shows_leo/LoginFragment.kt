@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
@@ -19,6 +21,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val args: LoginFragmentArgs by navArgs()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +60,18 @@ class LoginFragment : Fragment() {
                 )!!, true
             )
             findNavController().navigate(action)
+        }
+        viewModel.getLoginResultLiveData().observe(this.viewLifecycleOwner){success->
+            if (success) {
+                LoginFragmentDirections.actionLoginToShows(
+                    binding.emailInput.text.toString(),
+                    binding.rememberMeCheckbox.isChecked
+                ).also {
+                    findNavController().navigate(it)
+                }
+            } else {
+                Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
+            }
         }
 
 
@@ -111,12 +126,8 @@ class LoginFragment : Fragment() {
                 loginButton.apply {
                     isEnabled = true
                     loginButton.setOnClickListener {
-                        LoginFragmentDirections.actionLoginToShows(
-                            binding.emailInput.text.toString(),
-                            binding.rememberMeCheckbox.isChecked
-                        ).also {
-                            findNavController().navigate(it)
-                        }
+                        viewModel.login(emailInput.text.toString(),passwordInput.text.toString())
+
 
                     }
                 }

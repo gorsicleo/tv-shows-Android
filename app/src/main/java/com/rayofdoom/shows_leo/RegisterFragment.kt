@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rayofdoom.shows_leo.databinding.FragmentRegisterBinding
 import com.rayofdoom.shows_leo.utility_functions.addRepeatPasswordValidator
@@ -15,6 +17,8 @@ import com.rayofdoom.shows_leo.utility_functions.passwordValidator
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +32,16 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textListenersInit()
+
+        viewModel.getRegisterResultLiveData().observe(this.viewLifecycleOwner){success->
+            if (success) {
+                val action = RegisterFragmentDirections.actionRegisterToLogin()
+                action.registerSuccess = true
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(context, "Registration failed", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun textListenersInit() {
@@ -98,9 +112,7 @@ class RegisterFragment : Fragment() {
             registerButton.apply {
                 isEnabled = true
                 registerButton.setOnClickListener {
-                    val action = RegisterFragmentDirections.actionRegisterToLogin()
-                    action.registerSuccess = true
-                    findNavController().navigate(action)
+                    viewModel.register(emailInput.text.toString(),passwordInput.text.toString(),passwordRepeatInput.text.toString())
 
                 }
             }
