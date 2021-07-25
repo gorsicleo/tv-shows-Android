@@ -34,15 +34,17 @@ class ShowsFragment : Fragment() {
 
 
         initRecyclerView()
-        binding.clearSwitch?.setOnClickListener {
-            if (binding.clearSwitch!!.isChecked) {
-                Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
-                    .show()
-                binding.showsRecycler.visibility = View.INVISIBLE
-                binding.noShowsLayout.visibility = View.VISIBLE
-            } else {
-                binding.showsRecycler.visibility = View.VISIBLE
-                binding.noShowsLayout.visibility = View.INVISIBLE
+        binding.clearSwitch?.let { switch ->
+            switch.setOnClickListener {
+                if (switch.isChecked) {
+                    Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
+                        .show()
+                    binding.showsRecycler.visibility = View.INVISIBLE
+                    binding.noShowsLayout.visibility = View.VISIBLE
+                } else {
+                    binding.showsRecycler.visibility = View.VISIBLE
+                    binding.noShowsLayout.visibility = View.INVISIBLE
+                }
             }
         }
 
