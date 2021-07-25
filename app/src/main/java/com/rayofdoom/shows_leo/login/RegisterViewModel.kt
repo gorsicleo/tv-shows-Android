@@ -1,10 +1,10 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rayofdoom.shows_leo.model.RegisterRequest
-import com.rayofdoom.shows_leo.model.RegisterResponse
+import com.rayofdoom.shows_leo.model.network_models.request.RegisterRequest
+import com.rayofdoom.shows_leo.model.network_models.response.RegisterResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
 import retrofit2.Call
 import retrofit2.Callback

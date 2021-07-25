@@ -4,6 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginResponse(
-    @SerialName("user") val user: User
+data class Meta(
+    @SerialName("pagination") val pagination: Pagination
 )

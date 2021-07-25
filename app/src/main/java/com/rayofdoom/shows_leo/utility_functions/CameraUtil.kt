@@ -25,3 +25,7 @@ fun ImageView.displayAvatar(context: Context): Boolean {
         false
     }
 }
+
+fun ImageView.displayPhoto(context: Context,url: String){
+    Glide.with(context).load(url).into(this)
+}

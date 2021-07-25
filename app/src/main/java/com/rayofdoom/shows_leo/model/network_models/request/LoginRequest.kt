@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo.model
+package com.rayofdoom.shows_leo.model.network_models.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

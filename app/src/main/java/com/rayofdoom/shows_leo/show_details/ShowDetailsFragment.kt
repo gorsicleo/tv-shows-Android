@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.show_details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.shows.ShowsViewModel
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
 import com.rayofdoom.shows_leo.utility_functions.parseUsernameFromEmail
 
@@ -41,7 +43,10 @@ class ShowDetailsFragment : Fragment() {
         startViewModels()
         binding.apply {
             backButton?.setOnClickListener {
-                ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username, false).also {
+                ShowDetailsFragmentDirections.actionShowDetailsToShows(
+                    args.username,
+                    false
+                ).also {
                     findNavController().navigate(it)
                 }
             }
@@ -75,7 +80,7 @@ class ShowDetailsFragment : Fragment() {
     private fun displayShowDetails(show: Show) {
         binding.apply {
             showDetailsDescription.setText(show.showDescription)
-            showDetailsImage.setImageResource(show.imageResource)
+            //showDetailsImage.setImageResource(show.imageResource)
             collapsingToolbar?.title = show.showTitle
             showDetailsTitle?.text = show.showTitle
         }
@@ -91,7 +96,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun showBottomSheet() {
-        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialog)
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         dialog.show()

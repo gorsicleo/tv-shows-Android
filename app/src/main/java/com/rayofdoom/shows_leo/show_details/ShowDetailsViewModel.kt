@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.show_details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

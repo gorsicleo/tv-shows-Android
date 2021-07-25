@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.FragmentRegisterBinding
 import com.rayofdoom.shows_leo.utility_functions.addRepeatPasswordValidator
 import com.rayofdoom.shows_leo.utility_functions.addTextChangedValidator
@@ -35,7 +36,8 @@ class RegisterFragment : Fragment() {
 
         viewModel.getRegisterResultLiveData().observe(this.viewLifecycleOwner){success->
             if (success) {
-                val action = RegisterFragmentDirections.actionRegisterToLogin()
+                val action =
+                    RegisterFragmentDirections.actionRegisterToLogin()
                 action.registerSuccess = true
                 findNavController().navigate(action)
             } else {

@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.show_details
 
 import android.content.Context
 import android.view.LayoutInflater

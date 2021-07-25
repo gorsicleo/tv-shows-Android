@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo
+package com.rayofdoom.shows_leo.shows
 
 import android.content.Context
 import android.net.Uri
@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
@@ -26,12 +27,17 @@ import java.io.IOException
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
+private const val TOKEN_TYPE = "token-type"
+private const val ACCESS_TOKEN = "access-token"
+private const val CLIENT = "client"
+private const val UID = "uid"
 
 class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
     private val viewModel: ShowsViewModel by viewModels()
+    private var headers: List<String?> = emptyList()
 
     private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
         takePicture()
@@ -59,12 +65,17 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initShows()
+
+
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        headers =
+            listOf(sharedPrefs.getString(ACCESS_TOKEN,null),sharedPrefs.getString(CLIENT,null),sharedPrefs.getString(
+                UID,null))
+        viewModel.fetch(headers)
         viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
             initRecyclerView(shows)
         })
 
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPrefs.edit()) {
             if (args.rememberMeChecked) {
                 putBoolean(LOGIN_PASSED_FLAG, true)
@@ -92,7 +103,7 @@ class ShowsFragment : Fragment() {
     private fun initRecyclerView(shows: List<Show>) {
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
+        binding.showsRecycler.adapter = ShowsAdapter(shows,requireContext()) { show ->
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,
@@ -156,7 +167,7 @@ class ShowsFragment : Fragment() {
 
 
     private fun showBottomSheet() {
-        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialog)
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
