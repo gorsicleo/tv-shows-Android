@@ -148,7 +148,9 @@ class ShowsFragment : Fragment() {
             putBoolean(LOGIN_PASSED_FLAG, false)
             putString(USERNAME, null)
             apply()
-            findNavController().navigate(ShowsFragmentDirections.actionShowsToLogin())
+            val action = ShowsFragmentDirections.actionShowsToLogin()
+            action.registerSuccess = false
+            findNavController().navigate(action)
         }
     }
 

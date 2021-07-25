@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/login_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/login"
             android:textColor="@color/white"
@@ -24,6 +24,8 @@
             app:layout_constraintVertical_bias="0.4"
             app:layout_constraintBottom_toBottomOf="@+id/register_button"
             app:layout_constraintStart_toStartOf="@+id/email_container"
+            app:layout_constraintEnd_toEndOf="@id/shows_title"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -136,7 +138,7 @@
             app:srcCompat="@drawable/welcome_triangle_ic" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/shows_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"

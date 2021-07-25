@@ -8,21 +8,17 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
-import com.rayofdoom.shows_leo.utility_functions.addTextChangedValidator
+import com.rayofdoom.shows_leo.utility_functions.*
 
-private const val AT_SYMBOL = "@"
-private const val EMAIL_MINIMUM_LENGTH = 2
-private const val PASSWORD_MINIMUM_LENGTH = 6
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
-    private var conditionEmail = false
-    private var conditionPass = false
+    private val args: LoginFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +31,20 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.loginButton.isEnabled = false
-        binding.passwordContainer.boxStrokeColor =
-            getColor(requireActivity().applicationContext, R.color.white)
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        binding.apply {
+            loginButton.isEnabled = false
+            if (args.registerSuccess) {
+                registerButton.visibility = View.GONE
+                loginText.setText(R.string.registration_successful)
+            }
+            passwordContainer.boxStrokeColor =
+                getColor(requireActivity().applicationContext, R.color.white)
+            registerButton.setOnClickListener {
+                val action = LoginFragmentDirections.actionLoginToRegister()
+                findNavController().navigate(action)
+            }
+        }
         textListenersInit()
 
         val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
@@ -52,39 +59,35 @@ class LoginFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+
     }
 
     private fun textListenersInit() {
-        binding.emailInput.addTextChangedValidator { currentText -> validateEmail(currentText) }
 
-        binding.passwordInput.addTextChangedValidator { currentText -> validatePass(currentText) }
-    }
-
-    private fun validateEmail(inputString: String) {
-        if (!inputString.contains(AT_SYMBOL)) {
-            setErrorEmail(getString(R.string.error_email_no_at_sign))
-        } else if (inputString.length < EMAIL_MINIMUM_LENGTH) {
-            setErrorEmail(getString(R.string.error_email_too_short))
-        } else {
-            conditionEmail = true
-            enableButton()
-        }
-
-    }
-
-    private fun validatePass(inputString: String) {
-        if (inputString.length < PASSWORD_MINIMUM_LENGTH) {
-            setErrorPass(getString(R.string.error_password_too_short))
-        } else if (!inputString.matches(Regex(".*\\d.*"))) {
-            setErrorPass(getString(R.string.error_password_no_number))
-        } else {
-            conditionPass = true
-            enableButton()
+        binding.apply {
+            emailInput.addTextChangedValidator { currentText ->
+                emailValidator(
+                    currentText,
+                    { setErrorEmail(getString(R.string.error_email_too_short)) },
+                    { setErrorEmail(getString(R.string.error_email_no_at_sign)) },
+                    { emailInput.error = null },
+                    { enableButton() }
+                )
+            }
+            passwordInput.addTextChangedValidator { currentText ->
+                passwordValidator(
+                    currentText,
+                    { setErrorPass(getString(R.string.error_password_too_short)) },
+                    { setErrorPass(getString(R.string.error_password_no_number)) },
+                    { passwordInput.error = null },
+                    { enableButton() }
+                )
+            }
         }
     }
+
 
     private fun setErrorEmail(errorMessage: String) {
-        conditionEmail = false
         binding.apply {
             loginButton.isEnabled = false
             emailInput.error = errorMessage
@@ -93,7 +96,6 @@ class LoginFragment : Fragment() {
 
 
     private fun setErrorPass(errorMessage: String) {
-        conditionPass = false
         binding.apply {
             loginButton.isEnabled = false
             passwordInput.error = errorMessage
@@ -102,19 +104,23 @@ class LoginFragment : Fragment() {
 
 
     private fun enableButton() {
-        if (conditionEmail && conditionPass) {
-            binding.loginButton.apply {
-                isEnabled = true
-            }
-        }
-        binding.loginButton.setOnClickListener {
-            LoginFragmentDirections.actionLoginToShows(
-                binding.emailInput.text.toString(),
-                binding.rememberMeCheckbox.isChecked
-            ).also {
-                findNavController().navigate(it)
-            }
+        binding.apply {
+            if (emailInput.error == null && passwordInput.error == null && emailInput.text.toString()
+                    .isNotEmpty() && passwordInput.text.toString().isNotEmpty()
+            ) {
+                loginButton.apply {
+                    isEnabled = true
+                    loginButton.setOnClickListener {
+                        LoginFragmentDirections.actionLoginToShows(
+                            binding.emailInput.text.toString(),
+                            binding.rememberMeCheckbox.isChecked
+                        ).also {
+                            findNavController().navigate(it)
+                        }
 
+                    }
+                }
+            }
         }
     }
 
