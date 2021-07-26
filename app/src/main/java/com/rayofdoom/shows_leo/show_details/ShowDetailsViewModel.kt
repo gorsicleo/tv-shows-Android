@@ -4,13 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.Review
+import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.model.network_models.response.ReviewsResponse
+import com.rayofdoom.shows_leo.model.network_models.response.ShowDetailsResponse
+import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
+import com.rayofdoom.shows_leo.networking.ApiModule
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
+import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ShowDetailsViewModel : ViewModel() {
 
     private var reviews: MutableList<Review> = mutableListOf()
     private val reviewLiveData: MutableLiveData<List<Review>> by lazy {
         MutableLiveData<List<Review>>()
+    }
+
+    private val showDetailsLiveData: MutableLiveData<Show> by lazy {
+        MutableLiveData<Show>()
     }
 
     fun loadDummyReviews(value: Boolean) {
@@ -35,6 +48,60 @@ class ShowDetailsViewModel : ViewModel() {
     fun addReview(review: Review) {
         reviews.add(review)
         initReviews()
+    }
+
+    fun getShowDetailsLiveData(): LiveData<Show>{
+        return showDetailsLiveData
+    }
+
+    fun fetchShowDetails(headers: List<String?>,endpoint: String) {
+
+
+        ApiModule.retrofit.fetchShow(
+            tokenType = "Bearer",
+            accessToken = headers[0],
+            client = headers[1],
+            uid = headers[2],
+        endpoint).enqueue(object : Callback<ShowDetailsResponse> {
+            override fun onResponse(
+                call: Call<ShowDetailsResponse>,
+                response: Response<ShowDetailsResponse>
+            ) {
+                showDetailsLiveData.value = response.body()?.show
+                val res = response
+            }
+
+            override fun onFailure(call: Call<ShowDetailsResponse>, t: Throwable) {
+                showDetailsLiveData.value = fillShowsData()[0]
+            }
+
+
+        })
+    }
+
+    fun fetchReviews(headers: List<String?>,endpoint: String) {
+
+
+        ApiModule.retrofit.fetchReviews(
+            tokenType = "Bearer",
+            accessToken = headers[0],
+            client = headers[1],
+            uid = headers[2],
+            endpoint).enqueue(object : Callback<ReviewsResponse> {
+            override fun onResponse(
+                call: Call<ReviewsResponse>,
+                response: Response<ReviewsResponse>
+            ) {
+                reviewLiveData.value = response.body()?.reviews
+                val res = response
+            }
+
+            override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
+                reviewLiveData.value = fillReviewData()
+            }
+
+
+        })
     }
 
 

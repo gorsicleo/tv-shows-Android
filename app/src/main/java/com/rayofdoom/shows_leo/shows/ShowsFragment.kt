@@ -107,7 +107,7 @@ class ShowsFragment : Fragment() {
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,
-                show.showId - 1
+                show.showId
             ).also {
                 findNavController().navigate(it)
             }

@@ -1,5 +1,6 @@
 package com.rayofdoom.shows_leo.show_details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,14 @@ import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.shows.ShowsViewModel
+import com.rayofdoom.shows_leo.utility_functions.displayPhoto
 import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
 import com.rayofdoom.shows_leo.utility_functions.parseUsernameFromEmail
+
+private const val TOKEN_TYPE = "token-type"
+private const val ACCESS_TOKEN = "access-token"
+private const val CLIENT = "client"
+private const val UID = "uid"
 
 class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
@@ -26,7 +32,6 @@ class ShowDetailsFragment : Fragment() {
     private var reviewsAdapter: ItemReviewAdapter? = null
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-    private val viewModelShows: ShowsViewModel by viewModels()
     private val viewModelShowDetails: ShowDetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -40,6 +45,16 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        var headers = listOf(
+            sharedPrefs.getString(ACCESS_TOKEN, null),
+            sharedPrefs.getString(CLIENT, null),
+            sharedPrefs.getString(
+                UID, null
+            )
+        )
+        viewModelShowDetails.fetchShowDetails(headers,"https://tv-shows.infinum.academy/shows/"+args.showId.toString())
+        viewModelShowDetails.fetchReviews(headers,"https://tv-shows.infinum.academy/shows/"+args.showId.toString()+"/reviews")
         startViewModels()
         binding.apply {
             backButton?.setOnClickListener {
@@ -63,16 +78,14 @@ class ShowDetailsFragment : Fragment() {
 
 
     private fun startViewModels() {
-        viewModelShows.apply {
-            initShows()
-            getShowsLiveData().observe(viewLifecycleOwner, { shows ->
-                displayShowDetails(shows[args.showId])
-            })
-        }
+
         viewModelShowDetails.apply {
             initReviews()
             getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
                 initRecyclerView(reviews)
+            })
+            getShowDetailsLiveData().observe(viewLifecycleOwner,{
+                show -> displayShowDetails(show)
             })
         }
     }
@@ -80,7 +93,7 @@ class ShowDetailsFragment : Fragment() {
     private fun displayShowDetails(show: Show) {
         binding.apply {
             showDetailsDescription.setText(show.showDescription)
-            //showDetailsImage.setImageResource(show.imageResource)
+            show.imageResource?.let { showDetailsImage.displayPhoto(requireContext(), it) }
             collapsingToolbar?.title = show.showTitle
             showDetailsTitle?.text = show.showTitle
         }
@@ -109,14 +122,14 @@ class ShowDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                viewModelShowDetails.addReview(
+                /*viewModelShowDetails.addReview(
                     Review(
                         args.username.parseUsernameFromEmail(),
                         dialogBinding.reviewInput.text.toString(),
                         R.drawable.ic_profile_placeholder,
                         dialogBinding.rating.rating.toInt()
                     )
-                )
+                )*/
                 dialog.dismiss()
             }
 

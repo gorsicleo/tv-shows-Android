@@ -10,7 +10,7 @@ fun List<Review>.getCumulativeRatingForShow(): CumulativeRatingForShow {
     return if (this.isEmpty()) {
         CumulativeRatingForShow(this.size, 0.0)
     } else {
-        val average = this.map { review -> review.userRating }.average()
+        val average = this.map { review -> review.rating }.average()
         CumulativeRatingForShow(this.size, average)
     }
 }

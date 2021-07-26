@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.ItemReviewBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.displayAvatar
@@ -37,13 +38,13 @@ class ItemReviewAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
             binding.apply {
-                itemReviewUsername.text = review.userName
-                itemReviewUserReview.text = review.userReview
-                itemReviewRating.text = review.userRating.toString()
-                if (username == review.userName){
+                itemReviewUsername.text = review.user.email
+                itemReviewUserReview.text = review.comment
+                itemReviewRating.text = review.rating.toString()
+                if (username == review.user.email){
                     itemReviewUserProfilePicture.displayAvatar(context)
                 } else {
-                    itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                    itemReviewUserProfilePicture.setImageResource(R.drawable.ic_profile_placeholder)
                 }
             }
         }
