@@ -50,6 +50,7 @@ class ShowsFragment : Fragment() {
                 //update photos with new avatar
                 dialogBinding.userPanelPhoto.displayAvatar(requireContext())
                 binding.logOutButton.displayAvatar(requireContext())
+                uploadPicture()
             }
         }
 
@@ -149,6 +150,12 @@ class ShowsFragment : Fragment() {
                 )
                 cameraContract.launch(photoURI)
             }
+        }
+    }
+//TODO makni clear cache za sve slike osim avatara u toolbaru
+    private fun uploadPicture(){
+        if (FileUtil.getImageFile(context) != null){
+
         }
     }
 

@@ -34,7 +34,8 @@ interface ShowsApiService {
         @Header("access-token") accessToken: String?,
         @Header("client") client: String?,
         @Header("uid") uid: String?,
-    @Url url: String): Call<ShowDetailsResponse>
+        @Url url: String
+    ): Call<ShowDetailsResponse>
 
     @GET
     fun fetchReviews(
@@ -42,7 +43,8 @@ interface ShowsApiService {
         @Header("access-token") accessToken: String?,
         @Header("client") client: String?,
         @Header("uid") uid: String?,
-        @Url url: String): Call<ReviewsResponse>
+        @Url url: String
+    ): Call<ReviewsResponse>
 
     @POST("/reviews")
     fun createReview(
@@ -52,4 +54,14 @@ interface ShowsApiService {
         @Header("uid") uid: String?,
         @Body request: ReviewRequest
     ): Call<ReviewResponse>
+
+    /*@Multipart
+    @POST("/users")
+    fun uploadPicture(
+        @Header("token-type") tokenType: String?,
+        @Header("access-token") accessToken: String?,
+        @Header("client") client: String?,
+        @Header("uid") uid: String?,
+        @Part("image=@") MultipartBody.Part: image
+    ): Call<LoginResponse>*/
 }

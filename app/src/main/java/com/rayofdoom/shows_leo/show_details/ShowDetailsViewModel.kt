@@ -59,7 +59,7 @@ class ShowDetailsViewModel : ViewModel() {
                 call: Call<ReviewResponse>,
                 response: Response<ReviewResponse>
             ) {
-                response.body()?.review?.let { reviews.add(it) }
+                response.body()?.review?.let { reviews.add(0,it) }
                 initReviews()
             }
 
