@@ -2,6 +2,7 @@ package com.rayofdoom.shows_leo.networking
 
 import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.request.RegisterRequest
+import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
 import com.rayofdoom.shows_leo.model.network_models.response.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -42,4 +43,13 @@ interface ShowsApiService {
         @Header("client") client: String?,
         @Header("uid") uid: String?,
         @Url url: String): Call<ReviewsResponse>
+
+    @POST("/reviews")
+    fun createReview(
+        @Header("token-type") tokenType: String?,
+        @Header("access-token") accessToken: String?,
+        @Header("client") client: String?,
+        @Header("uid") uid: String?,
+        @Body request: ReviewRequest
+    ): Call<ReviewResponse>
 }

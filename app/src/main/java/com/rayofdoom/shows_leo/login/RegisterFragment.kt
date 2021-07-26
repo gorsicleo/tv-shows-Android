@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         textListenersInit()
 
-        viewModel.getRegisterResultLiveData().observe(this.viewLifecycleOwner){success->
+        viewModel.getRegisterResultLiveData().observe(this.viewLifecycleOwner) { success ->
             if (success) {
                 val action =
                     RegisterFragmentDirections.actionRegisterToLogin()
@@ -51,32 +51,34 @@ class RegisterFragment : Fragment() {
         binding.apply {
             emailInput.addTextChangedValidator { currentText ->
                 emailValidator(
-                    currentText,
-                    { setErrorEmail(getString(R.string.error_email_too_short)) },
-                    { setErrorEmail(getString(R.string.error_email_no_at_sign)) },
-                    { emailInput.error = null },
-                    { enableButton() }
+                    inputString = currentText,
+                    setErrorShortEmail = { setErrorEmail(getString(R.string.error_email_too_short)) },
+                    setErrorInvalidFormat = { setErrorEmail(getString(R.string.error_email_no_at_sign)) },
+                    clearError = { emailInput.error = null },
+                    buttonEnabler = { enableButton() }
                 )
             }
             passwordInput.addTextChangedValidator { currentText ->
                 passwordValidator(
-                    currentText,
-                    { setErrorPass(getString(R.string.error_password_too_short)) },
-                    { setErrorPass(getString(R.string.error_password_no_number)) },
-                    { passwordInput.error = null },
-                    { enableButton() }
+                    inputString = currentText,
+                    setErrorShortPassword = { setErrorPass(getString(R.string.error_password_too_short)) },
+                    setErrorInvalidFormat = { setErrorPass(getString(R.string.error_password_no_number)) },
+                    clearError = { passwordInput.error = null },
+                    buttonEnabler = { enableButton() }
                 )
             }
 
-            passwordRepeatInput.addRepeatPasswordValidator(passwordInput,
-                { setErrorNotMatchingPassword(getString(R.string.passwords_do_not_match)) },
-                { passwordRepeatInput.error = null },
-                { enableButton() })
+            passwordRepeatInput.addRepeatPasswordValidator(
+                other = passwordInput,
+                setErrorNotMatchingPasswords = { setErrorNotMatchingPassword(getString(R.string.passwords_do_not_match)) },
+                clearError = { passwordRepeatInput.error = null },
+                buttonEnabler = { enableButton() })
 
-            passwordInput.addRepeatPasswordValidator(passwordRepeatInput,
-                { setErrorNotMatchingPassword(getString(R.string.passwords_do_not_match)) },
-                { passwordRepeatInput.error = null },
-                { enableButton() })
+            passwordInput.addRepeatPasswordValidator(
+                other = passwordRepeatInput,
+                setErrorNotMatchingPasswords = { setErrorNotMatchingPassword(getString(R.string.passwords_do_not_match)) },
+                clearError = { passwordRepeatInput.error = null },
+                buttonEnabler = { enableButton() })
         }
     }
 
@@ -109,16 +111,19 @@ class RegisterFragment : Fragment() {
             if (emailInput.error == null && passwordInput.error == null && passwordRepeatInput.error == null && emailInput.text.toString()
                     .isNotEmpty() && passwordInput.text.toString()
                     .isNotEmpty() && passwordRepeatInput.text.toString().isNotEmpty()
-            )
-             {
-            registerButton.apply {
-                isEnabled = true
-                registerButton.setOnClickListener {
-                    viewModel.register(emailInput.text.toString(),passwordInput.text.toString(),passwordRepeatInput.text.toString())
+            ) {
+                registerButton.apply {
+                    isEnabled = true
+                    registerButton.setOnClickListener {
+                        viewModel.register(
+                            emailInput.text.toString(),
+                            passwordInput.text.toString(),
+                            passwordRepeatInput.text.toString()
+                        )
 
+                    }
                 }
             }
-        }
         }
     }
 }

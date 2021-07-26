@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
+import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
+import com.rayofdoom.shows_leo.model.network_models.response.ReviewResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ReviewsResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ShowDetailsResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
@@ -45,9 +48,30 @@ class ShowDetailsViewModel : ViewModel() {
         reviewLiveData.value = reviews
     }
 
-    fun addReview(review: Review) {
-        reviews.add(review)
-        initReviews()
+    fun addReview(headers: List<String?>, rating: Int, comment: String, showId: Int) {
+        val request = ReviewRequest(rating,comment,showId)
+
+        ApiModule.retrofit.createReview(tokenType = "Bearer",
+            accessToken = headers[0],
+            client = headers[1],
+            uid = headers[2],request).enqueue(object : Callback<ReviewResponse> {
+            override fun onResponse(
+                call: Call<ReviewResponse>,
+                response: Response<ReviewResponse>
+            ) {
+                response.body()?.review?.let { reviews.add(it) }
+                initReviews()
+            }
+
+            override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
+                reviewLiveData.value = fillReviewData()
+            }
+
+
+        })
+
+        /*reviews.add(review)
+        initReviews()*/
     }
 
     fun getShowDetailsLiveData(): LiveData<Show>{
@@ -79,6 +103,8 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
+
+
     fun fetchReviews(headers: List<String?>,endpoint: String) {
 
 
@@ -92,7 +118,8 @@ class ShowDetailsViewModel : ViewModel() {
                 call: Call<ReviewsResponse>,
                 response: Response<ReviewsResponse>
             ) {
-                reviewLiveData.value = response.body()?.reviews
+                response.body()?.reviews?.let { reviews.addAll(it) }
+                reviewLiveData.value = reviews
                 val res = response
             }
 

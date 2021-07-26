@@ -30,6 +30,7 @@ class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private var reviewsAdapter: ItemReviewAdapter? = null
+    private var headers: List<String?> = emptyList<String>()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
     private val viewModelShowDetails: ShowDetailsViewModel by viewModels()
@@ -46,7 +47,7 @@ class ShowDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        var headers = listOf(
+        headers = listOf(
             sharedPrefs.getString(ACCESS_TOKEN, null),
             sharedPrefs.getString(CLIENT, null),
             sharedPrefs.getString(
@@ -122,14 +123,15 @@ class ShowDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                /*viewModelShowDetails.addReview(
-                    Review(
-                        args.username.parseUsernameFromEmail(),
+                viewModelShowDetails.addReview(headers,dialogBinding.rating.rating.toInt(),dialogBinding.reviewInput.text.toString(),args.showId)
+
+
+/*                        args.username.parseUsernameFromEmail(),
                         dialogBinding.reviewInput.text.toString(),
                         R.drawable.ic_profile_placeholder,
-                        dialogBinding.rating.rating.toInt()
-                    )
-                )*/
+                        dialogBinding.rating.rating.toInt()*/
+
+
                 dialog.dismiss()
             }
 

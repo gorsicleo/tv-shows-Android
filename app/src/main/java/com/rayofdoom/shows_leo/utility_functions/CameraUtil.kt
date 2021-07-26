@@ -26,6 +26,10 @@ fun ImageView.displayAvatar(context: Context): Boolean {
     }
 }
 
-fun ImageView.displayPhoto(context: Context,url: String){
-    Glide.with(context).load(url).into(this)
+fun ImageView.displayPhoto(context: Context,url: String?){
+    if (url==null){
+        this.setImageResource(R.drawable.ic_profile_placeholder)
+    } else {
+        Glide.with(context).load(url).circleCrop().into(this)
+    }
 }

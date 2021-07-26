@@ -100,20 +100,20 @@ class LoginFragment : Fragment() {
         binding.apply {
             emailInput.addTextChangedValidator { currentText ->
                 emailValidator(
-                    currentText,
-                    { setErrorEmail(getString(R.string.error_email_too_short)) },
-                    { setErrorEmail(getString(R.string.error_email_no_at_sign)) },
-                    { emailInput.error = null },
-                    { enableButton() }
+                    inputString = currentText,
+                    setErrorShortEmail = { setErrorEmail(getString(R.string.error_email_too_short)) },
+                    setErrorInvalidFormat = { setErrorEmail(getString(R.string.error_email_no_at_sign)) },
+                    clearError = { emailInput.error = null },
+                    buttonEnabler = { enableButton() }
                 )
             }
             passwordInput.addTextChangedValidator { currentText ->
                 passwordValidator(
-                    currentText,
-                    { setErrorPass(getString(R.string.error_password_too_short)) },
-                    { setErrorPass(getString(R.string.error_password_no_number)) },
-                    { passwordInput.error = null },
-                    { enableButton() }
+                    inputString = currentText,
+                    setErrorShortPassword = { setErrorPass(getString(R.string.error_password_too_short)) },
+                    setErrorInvalidFormat = { setErrorPass(getString(R.string.error_password_no_number)) },
+                    clearError = { passwordInput.error = null },
+                    buttonEnabler = { enableButton() }
                 )
             }
         }
