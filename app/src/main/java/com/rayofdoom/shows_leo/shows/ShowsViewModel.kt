@@ -1,12 +1,19 @@
 package com.rayofdoom.shows_leo.shows
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.model.network_models.response.LoginResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
+import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,6 +51,38 @@ class ShowsViewModel : ViewModel() {
 
         })
     }
+
+    fun uploadUserPhoto(headers: List<String?>, context: Context) {
+        if (FileUtil.getImageFile(context) != null) {
+            val requestFile = FileUtil.getImageFile(context)!!
+                .asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            val profilePic = MultipartBody.Part.createFormData(
+                "image",
+                FileUtil.getImageFile(context)?.name, requestFile
+            )
+            ApiModule.retrofit.uploadPicture(
+                "Bearer",
+                headers[0],
+                headers[1],
+                headers[2],
+                profilePic
+            ).enqueue(object : Callback<LoginResponse>{
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    Toast.makeText(context, "Photo upload successful", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Toast.makeText(context, "Photo upload failed", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }
+    }
+
+
 
 }
 

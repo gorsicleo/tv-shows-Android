@@ -4,6 +4,7 @@ import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.request.RegisterRequest
 import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
 import com.rayofdoom.shows_leo.model.network_models.response.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -55,13 +56,13 @@ interface ShowsApiService {
         @Body request: ReviewRequest
     ): Call<ReviewResponse>
 
-    /*@Multipart
-    @POST("/users")
+    @Multipart
+    @PUT("/users")
     fun uploadPicture(
         @Header("token-type") tokenType: String?,
         @Header("access-token") accessToken: String?,
         @Header("client") client: String?,
         @Header("uid") uid: String?,
-        @Part("image=@") MultipartBody.Part: image
-    ): Call<LoginResponse>*/
+        @Part image: MultipartBody.Part
+    ): Call<LoginResponse>
 }

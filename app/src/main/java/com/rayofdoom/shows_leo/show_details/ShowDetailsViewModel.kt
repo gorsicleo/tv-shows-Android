@@ -1,5 +1,7 @@
 package com.rayofdoom.shows_leo.show_details
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,13 +9,15 @@ import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
-import com.rayofdoom.shows_leo.model.network_models.response.ReviewResponse
-import com.rayofdoom.shows_leo.model.network_models.response.ReviewsResponse
-import com.rayofdoom.shows_leo.model.network_models.response.ShowDetailsResponse
-import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
+import com.rayofdoom.shows_leo.model.network_models.response.*
 import com.rayofdoom.shows_leo.networking.ApiModule
+import com.rayofdoom.shows_leo.networking.ShowsApiService
+import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,17 +53,19 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
     fun addReview(headers: List<String?>, rating: Int, comment: String, showId: Int) {
-        val request = ReviewRequest(rating,comment,showId)
+        val request = ReviewRequest(rating, comment, showId)
 
-        ApiModule.retrofit.createReview(tokenType = "Bearer",
+        ApiModule.retrofit.createReview(
+            tokenType = "Bearer",
             accessToken = headers[0],
             client = headers[1],
-            uid = headers[2],request).enqueue(object : Callback<ReviewResponse> {
+            uid = headers[2], request
+        ).enqueue(object : Callback<ReviewResponse> {
             override fun onResponse(
                 call: Call<ReviewResponse>,
                 response: Response<ReviewResponse>
             ) {
-                response.body()?.review?.let { reviews.add(0,it) }
+                response.body()?.review?.let { reviews.add(0, it) }
                 initReviews()
             }
 
@@ -74,11 +80,13 @@ class ShowDetailsViewModel : ViewModel() {
         initReviews()*/
     }
 
-    fun getShowDetailsLiveData(): LiveData<Show>{
+
+
+    fun getShowDetailsLiveData(): LiveData<Show> {
         return showDetailsLiveData
     }
 
-    fun fetchShowDetails(headers: List<String?>,endpoint: String) {
+    fun fetchShowDetails(headers: List<String?>, endpoint: String) {
 
 
         ApiModule.retrofit.fetchShow(
@@ -86,7 +94,8 @@ class ShowDetailsViewModel : ViewModel() {
             accessToken = headers[0],
             client = headers[1],
             uid = headers[2],
-        endpoint).enqueue(object : Callback<ShowDetailsResponse> {
+            endpoint
+        ).enqueue(object : Callback<ShowDetailsResponse> {
             override fun onResponse(
                 call: Call<ShowDetailsResponse>,
                 response: Response<ShowDetailsResponse>
@@ -104,8 +113,7 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
 
-
-    fun fetchReviews(headers: List<String?>,endpoint: String) {
+    fun fetchReviews(headers: List<String?>, endpoint: String) {
 
 
         ApiModule.retrofit.fetchReviews(
@@ -113,7 +121,8 @@ class ShowDetailsViewModel : ViewModel() {
             accessToken = headers[0],
             client = headers[1],
             uid = headers[2],
-            endpoint).enqueue(object : Callback<ReviewsResponse> {
+            endpoint
+        ).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(
                 call: Call<ReviewsResponse>,
                 response: Response<ReviewsResponse>

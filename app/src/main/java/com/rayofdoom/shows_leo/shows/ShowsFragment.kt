@@ -19,9 +19,16 @@ import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.networking.ApiModule
+import com.rayofdoom.shows_leo.networking.ShowsApiService
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 
@@ -50,7 +57,7 @@ class ShowsFragment : Fragment() {
                 //update photos with new avatar
                 dialogBinding.userPanelPhoto.displayAvatar(requireContext())
                 binding.logOutButton.displayAvatar(requireContext())
-                uploadPicture()
+                viewModel.uploadUserPhoto(headers,requireContext())
             }
         }
 
@@ -153,11 +160,7 @@ class ShowsFragment : Fragment() {
         }
     }
 //TODO makni clear cache za sve slike osim avatara u toolbaru
-    private fun uploadPicture(){
-        if (FileUtil.getImageFile(context) != null){
 
-        }
-    }
 
     private fun logout() {
         val sharedPrefs =
