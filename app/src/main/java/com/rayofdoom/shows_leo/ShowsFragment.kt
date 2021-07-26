@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -39,12 +41,10 @@ class ShowsFragment : Fragment() {
                 if (switch.isChecked) {
                     Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
                         .show()
-                    binding.showsRecycler.visibility = View.INVISIBLE
-                    binding.noShowsLayout.visibility = View.VISIBLE
-                } else {
-                    binding.showsRecycler.visibility = View.VISIBLE
-                    binding.noShowsLayout.visibility = View.INVISIBLE
                 }
+                binding.showsRecycler.isInvisible = switch.isChecked.not()
+                binding.noShowsLayout.isVisible = switch.isChecked
+
             }
         }
 
