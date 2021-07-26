@@ -1,23 +1,15 @@
 package com.rayofdoom.shows_leo.show_details
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
 import com.rayofdoom.shows_leo.model.network_models.response.*
 import com.rayofdoom.shows_leo.networking.ApiModule
-import com.rayofdoom.shows_leo.networking.ShowsApiService
-import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.fillReviewData
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +33,6 @@ class ShowDetailsViewModel : ViewModel() {
             reviews.removeAll(fillReviewData())
             initReviews()
         }
-
     }
 
     fun getReviewsLiveData(): LiveData<List<Review>> {
@@ -72,14 +63,9 @@ class ShowDetailsViewModel : ViewModel() {
             override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
                 reviewLiveData.value = fillReviewData()
             }
-
-
         })
 
-        /*reviews.add(review)
-        initReviews()*/
     }
-
 
 
     fun getShowDetailsLiveData(): LiveData<Show> {
@@ -87,7 +73,6 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
     fun fetchShowDetails(headers: List<String?>, endpoint: String) {
-
 
         ApiModule.retrofit.fetchShow(
             tokenType = "Bearer",
@@ -101,20 +86,19 @@ class ShowDetailsViewModel : ViewModel() {
                 response: Response<ShowDetailsResponse>
             ) {
                 showDetailsLiveData.value = response.body()?.show
-                val res = response
             }
 
             override fun onFailure(call: Call<ShowDetailsResponse>, t: Throwable) {
+                //in case of failure load dummy data
                 showDetailsLiveData.value = fillShowsData()[0]
             }
 
-
         })
+
     }
 
 
     fun fetchReviews(headers: List<String?>, endpoint: String) {
-
 
         ApiModule.retrofit.fetchReviews(
             tokenType = "Bearer",
@@ -129,16 +113,15 @@ class ShowDetailsViewModel : ViewModel() {
             ) {
                 response.body()?.reviews?.let { reviews.addAll(it) }
                 reviewLiveData.value = reviews
-                val res = response
             }
 
             override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
+                //in case of failure load dummy data
                 reviewLiveData.value = fillReviewData()
             }
 
-
         })
-    }
 
+    }
 
 }

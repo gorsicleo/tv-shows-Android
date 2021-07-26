@@ -8,11 +8,6 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
-private const val TOKEN_TYPE = "Bearer"
-private const val ACCESS_TOKEN = "token-type"
-private const val CLIENT = "token-type"
-private const val UID = "uid"
-
 interface ShowsApiService {
 
     @POST("/users")

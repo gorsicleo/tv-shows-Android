@@ -18,13 +18,11 @@ import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.displayPhoto
-import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
-import com.rayofdoom.shows_leo.utility_functions.parseUsernameFromEmail
 
-private const val TOKEN_TYPE = "token-type"
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
 private const val UID = "uid"
+private const val BASE_URL = "https://tv-shows.infinum.academy/shows/"
 
 class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
@@ -46,17 +44,17 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        headers = listOf(
-            sharedPrefs.getString(ACCESS_TOKEN, null),
-            sharedPrefs.getString(CLIENT, null),
-            sharedPrefs.getString(
-                UID, null
-            )
-        )
-        viewModelShowDetails.fetchShowDetails(headers,"https://tv-shows.infinum.academy/shows/"+args.showId.toString())
-        viewModelShowDetails.fetchReviews(headers,"https://tv-shows.infinum.academy/shows/"+args.showId.toString()+"/reviews")
+
+        loadHeadersFromPrefs()
+
+        viewModelShowDetails.fetchShowDetails(headers, BASE_URL + args.showId.toString())
+        viewModelShowDetails.fetchReviews(headers, BASE_URL + args.showId.toString() + "/reviews")
         startViewModels()
+        setClickListeners()
+
+    }
+
+    private fun setClickListeners() {
         binding.apply {
             backButton?.setOnClickListener {
                 ShowDetailsFragmentDirections.actionShowDetailsToShows(
@@ -77,6 +75,17 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
+    private fun loadHeadersFromPrefs() {
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        headers = listOf(
+            sharedPrefs.getString(ACCESS_TOKEN, null),
+            sharedPrefs.getString(CLIENT, null),
+            sharedPrefs.getString(
+                UID, null
+            )
+        )
+    }
+
 
     private fun startViewModels() {
 
@@ -85,18 +94,19 @@ class ShowDetailsFragment : Fragment() {
             getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
                 initRecyclerView(reviews)
             })
-            getShowDetailsLiveData().observe(viewLifecycleOwner,{
-                show -> displayShowDetails(show)
+            getShowDetailsLiveData().observe(viewLifecycleOwner, { show ->
+                displayShowDetails(show)
             })
         }
     }
 
     private fun displayShowDetails(show: Show) {
         binding.apply {
-            showDetailsDescription.setText(show.showDescription)
+            showDetailsDescription.text = show.showDescription
             show.imageResource?.let { showDetailsImage.displayPhoto(requireContext(), it) }
             collapsingToolbar?.title = show.showTitle
             showDetailsTitle?.text = show.showTitle
+            displayAverage(show)
         }
     }
 
@@ -104,8 +114,7 @@ class ShowDetailsFragment : Fragment() {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter =
-            ItemReviewAdapter(reviews, args.username.parseUsernameFromEmail(), requireContext())
-        displayAverage(reviews)
+            ItemReviewAdapter(reviews, args.username, requireContext())
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
@@ -114,7 +123,12 @@ class ShowDetailsFragment : Fragment() {
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         dialog.show()
+        addNewReviewListener(dialogBinding)
 
+
+    }
+
+    private fun addNewReviewListener(dialogBinding: DialogAddReviewBinding) {
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toInt() == 0) {
                 Toast.makeText(
@@ -123,26 +137,26 @@ class ShowDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                viewModelShowDetails.addReview(headers,dialogBinding.rating.rating.toInt(),dialogBinding.reviewInput.text.toString(),args.showId)
-
-
-
-
-                dialog.dismiss()
+                viewModelShowDetails.addReview(
+                    headers,
+                    dialogBinding.rating.rating.toInt(),
+                    dialogBinding.reviewInput.text.toString(),
+                    args.showId
+                )
+                BottomSheetDialog(requireContext(), R.style.BottomSheetDialog).dismiss()
             }
 
         }
     }
 
-    private fun displayAverage(reviews: List<Review>) {
-        val showRatingData = reviews.getCumulativeRatingForShow()
+    private fun displayAverage(show: Show) {
         binding.showDetailsReviewData.text =
             getString(
                 R.string.display_average_format,
-                showRatingData.numberOfReviews,
-                showRatingData.averageScore
+                show.noOfReviews,
+                show.averageRating
             )
-        binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
+        binding.showDetailsRatingBar.rating = show.averageRating?.toFloat() ?: 0.0f
     }
 
 

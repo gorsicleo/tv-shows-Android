@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.ItemReviewBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.displayAvatar
@@ -49,7 +48,6 @@ class ItemReviewAdapter(
                     itemReviewUserProfilePicture.displayPhoto(context, review.user.imageUrl)
 
                 }
-                //itemReviewUserProfilePicture.setImageResource(R.drawable.ic_profile_placeholder)
             }
         }
     }

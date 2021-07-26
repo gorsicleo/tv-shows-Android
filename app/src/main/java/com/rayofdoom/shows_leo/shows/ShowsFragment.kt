@@ -19,22 +19,14 @@ import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.networking.ApiModule
-import com.rayofdoom.shows_leo.networking.ShowsApiService
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
 import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
-private const val TOKEN_TYPE = "token-type"
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
 private const val UID = "uid"
@@ -54,10 +46,10 @@ class ShowsFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
                 val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
-                //update photos with new avatar
+                //update views with new avatar
                 dialogBinding.userPanelPhoto.displayAvatar(requireContext())
                 binding.logOutButton.displayAvatar(requireContext())
-                viewModel.uploadUserPhoto(headers,requireContext())
+                viewModel.uploadUserPhoto(headers, requireContext())
             }
         }
 
@@ -77,8 +69,13 @@ class ShowsFragment : Fragment() {
 
         val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         headers =
-            listOf(sharedPrefs.getString(ACCESS_TOKEN,null),sharedPrefs.getString(CLIENT,null),sharedPrefs.getString(
-                UID,null))
+            listOf(
+                sharedPrefs.getString(ACCESS_TOKEN, null),
+                sharedPrefs.getString(CLIENT, null),
+                sharedPrefs.getString(
+                    UID, null
+                )
+            )
         viewModel.fetch(headers)
         viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
             initRecyclerView(shows)
@@ -92,11 +89,12 @@ class ShowsFragment : Fragment() {
             }
         }
 
-
-        binding.clearSwitch?.setOnClickListener {
-            //it does not have isChecked property... smart cast does not work, so i used !!
-            clearShows(binding.clearSwitch!!.isChecked)
+        binding.clearSwitch?.let{ switch ->
+            switch.setOnClickListener {
+                clearShows(switch.isChecked)
+            }
         }
+
 
         binding.logOutButton.apply {
             displayAvatar(requireContext())
@@ -111,7 +109,7 @@ class ShowsFragment : Fragment() {
     private fun initRecyclerView(shows: List<Show>) {
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.showsRecycler.adapter = ShowsAdapter(shows,requireContext()) { show ->
+        binding.showsRecycler.adapter = ShowsAdapter(shows, requireContext()) { show ->
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,
