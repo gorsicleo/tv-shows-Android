@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.response.LoginResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
-import okhttp3.Headers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +19,7 @@ class LoginViewModel : ViewModel() {
         return loginResultLiveData
     }
 
-    fun getHeaders(): List<String>{
+    fun getHeaders(): List<String> {
         return headers
     }
 
@@ -33,9 +32,9 @@ class LoginViewModel : ViewModel() {
                 response: Response<LoginResponse>
             ) {
                 headers = listOf(
-                    response.headers().get("access-token")!!,
-                    response.headers().get("client")!!,
-                    response.headers().get("uid")!!
+                    response.headers()["access-token"]!!,
+                    response.headers()["client"]!!,
+                    response.headers()["uid"]!!
                 )
                 loginResultLiveData.value = response.isSuccessful
             }

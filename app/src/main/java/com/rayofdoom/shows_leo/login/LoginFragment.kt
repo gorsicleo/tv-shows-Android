@@ -18,7 +18,6 @@ import com.rayofdoom.shows_leo.utility_functions.*
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
-private const val TOKEN_TYPE = "token-type"
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
 private const val UID = "uid"
@@ -40,24 +39,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        binding.apply {
-            loginButton.isEnabled = false
-            if (args.registerSuccess) {
-                registerButton.visibility = View.GONE
-                loginText.setText(R.string.registration_successful)
-            }
-            passwordContainer.boxStrokeColor =
-                getColor(requireActivity().applicationContext, R.color.white)
-            registerButton.setOnClickListener {
-                val action = LoginFragmentDirections.actionLoginToRegister()
-                findNavController().navigate(action)
-            }
-        }
-        textListenersInit()
-
         val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userRegistered = prefs.getBoolean(LOGIN_PASSED_FLAG, false)
+
         if (userRegistered) {
             val action = LoginFragmentDirections.actionLoginToShows(
                 prefs.getString(
@@ -67,9 +51,27 @@ class LoginFragment : Fragment() {
             )
             findNavController().navigate(action)
         }
-        viewModel.getLoginResultLiveData().observe(this.viewLifecycleOwner){success->
+        if (args.registerSuccess) {
+            loginAfterSuccessfulRegistration()
+        }
+
+        binding.registerButton.setOnClickListener {
+            val action = LoginFragmentDirections.actionLoginToRegister()
+            findNavController().navigate(action)
+        }
+
+
+        textListenersInit()
+
+        setLiveDataObserver()
+
+    }
+
+
+    private fun setLiveDataObserver() {
+        viewModel.getLoginResultLiveData().observe(this.viewLifecycleOwner) { success ->
             if (success) {
-                putHeaders(viewModel.getHeaders())
+                putHeadersToPrefs(viewModel.getHeaders())
                 LoginFragmentDirections.actionLoginToShows(
                     binding.emailInput.text.toString(),
                     binding.rememberMeCheckbox.isChecked
@@ -77,20 +79,25 @@ class LoginFragment : Fragment() {
                     findNavController().navigate(it)
                 }
             } else {
-                Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
-    private fun putHeaders(headers: List<String>){
+    private fun loginAfterSuccessfulRegistration() {
+        binding.apply {
+            registerButton.visibility = View.GONE
+            loginText.setText(R.string.registration_successful)
+        }
+    }
+
+    private fun putHeadersToPrefs(headers: List<String>) {
         val sharedPrefs =
             activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPrefs.edit()) {
-            putString(ACCESS_TOKEN,headers[0])
-            putString(CLIENT,headers[1])
-            putString(UID,headers[2])
+            putString(ACCESS_TOKEN, headers[0])
+            putString(CLIENT, headers[1])
+            putString(UID, headers[2])
             apply()
         }
     }
@@ -144,7 +151,7 @@ class LoginFragment : Fragment() {
                 loginButton.apply {
                     isEnabled = true
                     loginButton.setOnClickListener {
-                        viewModel.login(emailInput.text.toString(),passwordInput.text.toString())
+                        viewModel.login(emailInput.text.toString(), passwordInput.text.toString())
 
 
                     }

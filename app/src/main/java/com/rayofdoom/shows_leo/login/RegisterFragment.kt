@@ -33,7 +33,10 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textListenersInit()
+        setLiveDataObserver()
+    }
 
+    private fun setLiveDataObserver() {
         viewModel.getRegisterResultLiveData().observe(this.viewLifecycleOwner) { success ->
             if (success) {
                 val action =
@@ -46,8 +49,8 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun textListenersInit() {
 
+    private fun textListenersInit() {
         binding.apply {
             emailInput.addTextChangedValidator { currentText ->
                 emailValidator(
@@ -68,6 +71,7 @@ class RegisterFragment : Fragment() {
                 )
             }
 
+            //These two repeatPasswordValidators are here to ensure that if even one password field changes, error will inform user about not matching passwords
             passwordRepeatInput.addRepeatPasswordValidator(
                 other = passwordInput,
                 setErrorNotMatchingPasswords = { setErrorNotMatchingPassword(getString(R.string.passwords_do_not_match)) },
@@ -127,6 +131,3 @@ class RegisterFragment : Fragment() {
         }
     }
 }
-
-
-
