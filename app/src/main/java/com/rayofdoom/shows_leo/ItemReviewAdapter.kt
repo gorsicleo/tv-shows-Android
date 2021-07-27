@@ -32,10 +32,13 @@ class ItemReviewAdapter(
     inner class ItemReviewViewHolder(private val binding: ItemReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
-            binding.itemReviewUsername.text = review.userName
-            binding.itemReviewUserReview.text = review.userReview
-            binding.itemReviewRating.text = review.userRating.toString()
-            binding.itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+            binding.apply {
+                itemReviewUsername.text = review.userName
+                itemReviewUserReview.text = review.userReview
+                itemReviewRating.text = review.userRating.toString()
+                itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+            }
+
         }
     }
 
