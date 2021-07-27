@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -75,8 +76,11 @@ class ShowsFragment : Fragment() {
 
 
         binding.clearSwitch?.setOnClickListener {
-            //it does not have isChecked property... smart cast does not work, so i used !!
-            clearShows(binding.clearSwitch!!.isChecked)
+            if (binding.clearSwitch!=null) {
+                clearShows(binding.clearSwitch!!.isChecked)
+            } else{
+                Toast.makeText(context, getString(R.string.binding_null), Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.logOutButton.apply {
@@ -108,27 +112,19 @@ class ShowsFragment : Fragment() {
         _binding = null
     }
 
-    private fun clearShows(value: Boolean) {
-        if (value) {
+    private fun clearShows(isChecked: Boolean) {
+        if (isChecked) {
             Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
                 .show()
-            binding.showsRecycler.visibility = View.INVISIBLE
-            binding.noShowsLayout.visibility = View.VISIBLE
-        } else {
-            binding.showsRecycler.visibility = View.VISIBLE
-            binding.noShowsLayout.visibility = View.INVISIBLE
         }
+            binding.showsRecycler.isVisible = isChecked.not()
+            binding.noShowsLayout.isVisible = isChecked
+
     }
 
 
     private fun takePicture() {
-        val photoFile: File? = try {
-            FileUtil.createImageFile(requireContext())
-        } catch (ex: IOException) {
-            // Error occurred while creating the File
-            null
-        }
-        // Continue only if the File was successfully created
+        val photoFile: File? = FileUtil.createImageFile(requireContext())
         photoFile?.also { photo ->
             context?.apply {
                 val photoURI: Uri = FileProvider.getUriForFile(
@@ -159,7 +155,6 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(dialogBinding.root)
 
         dialogBinding.apply {
-            //initializing components of bottom sheet
             userPanelEmail.text = args.username
             val avatarExists = dialogBinding.userPanelPhoto.displayAvatar(requireContext())
             if (!avatarExists) {

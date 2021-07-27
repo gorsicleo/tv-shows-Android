@@ -24,7 +24,6 @@ class ShowDetailsFragment : Fragment() {
     private var reviewsAdapter: ItemReviewAdapter? = null
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-    private val viewModelShows: ShowsViewModel by viewModels()
     private val viewModelShowDetails: ShowDetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -38,7 +37,7 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startViewModels()
+        startViewModel()
         binding.apply {
             backButton?.setOnClickListener {
                 ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username, false).also {
@@ -57,14 +56,12 @@ class ShowDetailsFragment : Fragment() {
     }
 
 
-    private fun startViewModels() {
-        viewModelShows.apply {
-            initShows()
-            getShowsLiveData().observe(viewLifecycleOwner, { shows ->
+    private fun startViewModel() {
+        viewModelShowDetails.apply {
+            initShowDetailsLiveData()
+            getShowDetailsLiveData().observe(viewLifecycleOwner,{shows ->
                 displayShowDetails(shows[args.showId])
             })
-        }
-        viewModelShowDetails.apply {
             initReviews()
             getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
                 initRecyclerView(reviews)

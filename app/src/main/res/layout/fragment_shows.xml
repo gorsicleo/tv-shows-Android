@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ShowsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -63,6 +64,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:fitsSystemWindows="true"
         android:id="@+id/no_shows_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
