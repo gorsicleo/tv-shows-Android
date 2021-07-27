@@ -26,7 +26,7 @@ class ItemReviewAdapter(
     override fun getItemCount(): Int {
         return reviews.size
     }
-    //maybe in the future someone will need it...
+
     fun addItem(newReviewList: List<Review>) {
         reviews = newReviewList
         notifyItemInserted(reviews.lastIndex)
