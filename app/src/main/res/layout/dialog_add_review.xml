@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/botom_sheet_title"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="32dp"
+        android:stepSize="1"
+        android:theme="@style/rating_bar_style"
+        tools:rating="3" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/review_container"
+        style="@style/review_text_input_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        app:hintTextColor="@color/rating_bar_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/review_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/bottom_sheet_hint"
+            android:textColor="@color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_review_button"
+        style="@style/button_style_submit"
+        android:layout_width="match_parent"
+        android:height="48dp"
+        android:text="@string/bottom_sheet_button" />
+
+</LinearLayout>
