@@ -1,36 +1,42 @@
 package com.rayofdoom.shows_leo
 
-import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.rayofdoom.shows_leo.databinding.ActivityLoginBinding
-import com.rayofdoom.shows_leo.utility_functions.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
+import com.rayofdoom.shows_leo.utility_functions.addTextChangedValidator
 
 private const val AT_SYMBOL = "@"
 private const val EMAIL_MINIMUM_LENGTH = 2
 private const val PASSWORD_MINIMUM_LENGTH = 6
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
     private var conditionEmail = false
     private var conditionPass = false
 
-    private lateinit var binding: ActivityLoginBinding
-
-    companion object {
-        fun buildIntent(activity: Activity): Intent {
-            return Intent(activity, LoginActivity::class.java)
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        //this is used to disable button when app starts
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.loginButton.isEnabled = false
+        binding.passwordContainer.boxStrokeColor =
+            getColor(requireActivity().applicationContext, R.color.white)
         textListenersInit()
+
     }
 
     private fun textListenersInit() {
@@ -87,9 +93,15 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.loginButton.setOnClickListener {
-            intent = WelcomeActivity.buildIntent(this, binding.emailInput.text.toString())
-            startActivity(intent)
+            LoginFragmentDirections.actionLoginToShows(binding.emailInput.text.toString()).also {
+                findNavController().navigate(it)
+            }
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
