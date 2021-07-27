@@ -17,7 +17,7 @@ import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.utility_functions.displayPhoto
+import com.rayofdoom.shows_leo.utility_functions.displayShowImage
 
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
@@ -103,7 +103,7 @@ class ShowDetailsFragment : Fragment() {
     private fun displayShowDetails(show: Show) {
         binding.apply {
             showDetailsDescription.text = show.showDescription
-            show.imageResource?.let { showDetailsImage.displayPhoto(requireContext(), it) }
+            show.imageResource?.let { showDetailsImage.displayShowImage(requireContext(), it) }
             collapsingToolbar?.title = show.showTitle
             showDetailsTitle?.text = show.showTitle
             displayAverage(show)
@@ -123,12 +123,7 @@ class ShowDetailsFragment : Fragment() {
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         dialog.show()
-        addNewReviewListener(dialogBinding)
 
-
-    }
-
-    private fun addNewReviewListener(dialogBinding: DialogAddReviewBinding) {
         dialogBinding.addReviewButton.setOnClickListener {
             if (dialogBinding.rating.rating.toInt() == 0) {
                 Toast.makeText(
@@ -143,11 +138,15 @@ class ShowDetailsFragment : Fragment() {
                     dialogBinding.reviewInput.text.toString(),
                     args.showId
                 )
-                BottomSheetDialog(requireContext(), R.style.BottomSheetDialog).dismiss()
+                dialog.dismiss()
+
             }
 
         }
+
+
     }
+
 
     private fun displayAverage(show: Show) {
         binding.showDetailsReviewData.text =

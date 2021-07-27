@@ -1,22 +1,12 @@
 package com.rayofdoom.shows_leo.utility_functions
 
-import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.model.User
 
 fun fillReviewData(): MutableList<Review> {
     return mutableListOf(
-        Review(2345,"test",5,5, User(23,"Leo@test.hr",null))
-        /*Review("imenko.prezimenovic", "super je", R.drawable.ic_profile_placeholder, 5),
-        Review("ffloreani", "bezveze", R.drawable.ic_profile_placeholder, 2),
-        Review(
-            "Leo",
-            "Zapevati pred punom Kombank arenom je životna želja svakog pevača. Ja sam, zahvaljujući vama, svoju životnu želju ispunio 08. marta 2016. godine. Sve moje najlepše pesme posvećene su  damama, pa je nekako logičan korak bio da im posvetim i ceo jedan koncert.",
-            R.drawable.ic_profile_placeholder,
-            5
-        )*/
-    )
+        Review(2345,"test",5,5, User(23,"Leo@test.hr",null)))
 }
 
 fun fillShowsData(): List<Show> {
@@ -35,7 +25,3 @@ fun fillShowsData(): List<Show> {
         )
     )
 }
-
-//fun getShowById(id: Int): Show {
-//    return fillShowsData()[id - 1]
-//}

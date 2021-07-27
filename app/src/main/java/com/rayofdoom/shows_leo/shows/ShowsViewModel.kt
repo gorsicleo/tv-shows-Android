@@ -10,6 +10,7 @@ import com.rayofdoom.shows_leo.model.network_models.response.LoginResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
+import com.rayofdoom.shows_leo.utility_functions.PrefsUtil
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -22,14 +23,20 @@ class ShowsViewModel : ViewModel() {
     private val showsResultLiveData: MutableLiveData<List<Show>> by lazy {
         MutableLiveData<List<Show>>()
     }
+    private val userPhotoLiveData: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
     fun getShowsLiveData(): LiveData<List<Show>> {
         return showsResultLiveData
     }
 
+    fun getUserPhotoLiveData(): LiveData<String> {
+        return userPhotoLiveData
+    }
+
 
     fun fetch(headers: List<String?>) {
-
 
         ApiModule.retrofit.fetchShows(
             tokenType = "Bearer",
@@ -48,11 +55,11 @@ class ShowsViewModel : ViewModel() {
                 showsResultLiveData.value = fillShowsData()
             }
 
-
         })
     }
 
     fun uploadUserPhoto(headers: List<String?>, context: Context) {
+
         if (FileUtil.getImageFile(context) != null) {
             val requestFile = FileUtil.getImageFile(context)!!
                 .asRequestBody("multipart/form-data".toMediaTypeOrNull())
@@ -66,11 +73,12 @@ class ShowsViewModel : ViewModel() {
                 headers[1],
                 headers[2],
                 profilePic
-            ).enqueue(object : Callback<LoginResponse>{
+            ).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
+                    userPhotoLiveData.value = response.body()?.user?.imageUrl
                     Toast.makeText(context, "Photo upload successful", Toast.LENGTH_SHORT).show()
                 }
 
@@ -82,7 +90,4 @@ class ShowsViewModel : ViewModel() {
         }
     }
 
-
-
 }
-

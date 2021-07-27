@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rayofdoom.shows_leo.databinding.ViewShowItemBinding
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.utility_functions.displayPhoto
+import com.rayofdoom.shows_leo.utility_functions.displayShowImage
 
 class ShowsAdapter(
     private var items: List<Show>,
@@ -33,7 +33,7 @@ class ShowsAdapter(
         fun bind(item: Show) {
             binding.showTitle.text = item.showTitle
             binding.showDescription.text = item.showDescription
-            item.imageResource?.let { binding.showImage.displayPhoto(context, it) }
+            item.imageResource?.let { binding.showImage.displayShowImage(context, it) }
             binding.root.setOnClickListener {
                 onClickCallback(item)
             }

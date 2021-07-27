@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rayofdoom.shows_leo.databinding.ItemReviewBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.utility_functions.displayAvatar
-import com.rayofdoom.shows_leo.utility_functions.displayPhoto
 
 class ItemReviewAdapter(
     private var reviews: List<Review>,
@@ -42,14 +41,10 @@ class ItemReviewAdapter(
                 itemReviewUsername.text = review.user.email
                 itemReviewUserReview.text = review.comment
                 itemReviewRating.text = review.rating.toString()
-                if (username == review.user.email) {
-                    itemReviewUserProfilePicture.displayAvatar(context)
-                } else {
-                    itemReviewUserProfilePicture.displayPhoto(context, review.user.imageUrl)
-
-                }
+                itemReviewUserProfilePicture.displayAvatar(context, review.user.imageUrl)
             }
         }
     }
 
 }
+

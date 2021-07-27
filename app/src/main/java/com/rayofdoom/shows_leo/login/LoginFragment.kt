@@ -6,21 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getColor
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
-import com.rayofdoom.shows_leo.shows.ShowsFragmentDirections
 import com.rayofdoom.shows_leo.utility_functions.*
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
-private const val ACCESS_TOKEN = "access-token"
-private const val CLIENT = "client"
-private const val UID = "uid"
+
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -71,7 +68,8 @@ class LoginFragment : Fragment() {
     private fun setLiveDataObserver() {
         viewModel.getLoginResultLiveData().observe(this.viewLifecycleOwner) { success ->
             if (success) {
-                putHeadersToPrefs(viewModel.getHeaders())
+                PrefsUtil.putHeadersToPrefs(viewModel.getHeaders(), requireActivity())
+                PrefsUtil.putUserToPrefs(viewModel.getUser(), requireActivity())
                 LoginFragmentDirections.actionLoginToShows(
                     binding.emailInput.text.toString(),
                     binding.rememberMeCheckbox.isChecked
@@ -91,16 +89,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun putHeadersToPrefs(headers: List<String>) {
-        val sharedPrefs =
-            activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with(sharedPrefs.edit()) {
-            putString(ACCESS_TOKEN, headers[0])
-            putString(CLIENT, headers[1])
-            putString(UID, headers[2])
-            apply()
-        }
-    }
 
     private fun textListenersInit() {
 
