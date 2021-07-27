@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/login_fragment">
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.rayofdoom.shows_leo.LoginFragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_login_to_shows"
+            app:destination="@id/shows_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/shows_fragment"
+        android:name="com.rayofdoom.shows_leo.ShowsFragment"
+        tools:layout="@layout/fragment_shows">
+
+        <argument
+            android:name="username"
+            app:argType="string"
+            />
+
+        <action
+            android:id="@+id/action_shows_to_shows_details"
+            app:destination="@id/show_details_fragment"
+            app:popUpTo="@id/show_details_fragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/action_shows_to_login"
+            app:destination="@id/login_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/show_details_fragment"
+        android:name="com.rayofdoom.shows_leo.ShowDetailsFragment"
+        tools:layout="@layout/fragment_show_details">
+
+        <argument
+            android:name="username"
+            app:argType="string" />
+
+        <argument
+            android:name="show_id"
+            app:argType="integer" />
+
+
+        <action
+            android:id="@+id/action_show_details_to_shows"
+            app:destination="@id/shows_fragment"
+            app:popUpTo="@id/shows_fragment"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+
+</navigation>

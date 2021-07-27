@@ -28,15 +28,12 @@ class ShowsAdapter(
     inner class ShowsViewHolder(private val binding: ViewShowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Show) {
-            binding.apply {
-                showTitle.text = item.showTitle
-                showDescription.text = itemView.context.getString(item.showDescription)
-                showImage.setImageResource(item.imageResource)
-                root.setOnClickListener {
-                    onClickCallback(item)
-                }
+            binding.showTitle.text = item.showTitle
+            binding.showDescription.text = itemView.context.getString(item.showDescription)
+            binding.showImage.setImageResource(item.imageResource)
+            binding.root.setOnClickListener {
+                onClickCallback(item)
             }
-
         }
     }
 
