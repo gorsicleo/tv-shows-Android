@@ -10,7 +10,6 @@ import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 
 class ItemReviewAdapter(
     private var reviews: List<Review>,
-    private var username: String,
     private var context: Context
 ) : RecyclerView.Adapter<ItemReviewAdapter.ItemReviewViewHolder>() {
 

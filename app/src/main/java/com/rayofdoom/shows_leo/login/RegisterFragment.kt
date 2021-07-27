@@ -122,7 +122,8 @@ class RegisterFragment : Fragment() {
                         viewModel.register(
                             emailInput.text.toString(),
                             passwordInput.text.toString(),
-                            passwordRepeatInput.text.toString()
+                            passwordRepeatInput.text.toString(),
+                            context
                         )
 
                     }

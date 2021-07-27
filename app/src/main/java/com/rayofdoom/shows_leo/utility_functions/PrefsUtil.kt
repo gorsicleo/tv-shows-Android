@@ -56,7 +56,7 @@ object PrefsUtil {
         }
     }
 
-    fun loadUserFromPrefs(activity: Activity): User? {
+    fun loadUserFromPrefs(activity: Activity): User {
         val sharedPrefs = activity.getPreferences(Context.MODE_PRIVATE)
         return User(
             sharedPrefs.getString(USER_ID, "-1")!!.toInt(),

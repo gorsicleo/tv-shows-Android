@@ -139,7 +139,7 @@ class LoginFragment : Fragment() {
                 loginButton.apply {
                     isEnabled = true
                     loginButton.setOnClickListener {
-                        viewModel.login(emailInput.text.toString(), passwordInput.text.toString())
+                        viewModel.login(emailInput.text.toString(), passwordInput.text.toString(),requireContext())
 
 
                     }

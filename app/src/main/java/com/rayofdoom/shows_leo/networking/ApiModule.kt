@@ -1,6 +1,7 @@
 package com.rayofdoom.shows_leo.networking
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -12,6 +13,7 @@ object ApiModule {
 
     lateinit var retrofit: ShowsApiService
 
+    @ExperimentalSerializationApi
     fun initRetrofit() {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {

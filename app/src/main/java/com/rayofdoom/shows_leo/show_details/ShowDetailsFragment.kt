@@ -114,7 +114,7 @@ class ShowDetailsFragment : Fragment() {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter =
-            ItemReviewAdapter(reviews, args.username, requireContext())
+            ItemReviewAdapter(reviews, requireContext())
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
