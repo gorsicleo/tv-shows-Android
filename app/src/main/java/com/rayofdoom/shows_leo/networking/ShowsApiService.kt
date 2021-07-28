@@ -17,47 +17,18 @@ interface ShowsApiService {
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
     @GET("/shows")
-    fun fetchShows(
-        @Header("token-type") tokenType: String?,
-        @Header("access-token") accessToken: String?,
-        @Header("client") client: String?,
-        @Header("uid") uid: String?
-    ): Call<ShowsResponse>
+    fun fetchShows(): Call<ShowsResponse>
 
     @GET
-    fun fetchShow(
-        @Header("token-type") tokenType: String?,
-        @Header("access-token") accessToken: String?,
-        @Header("client") client: String?,
-        @Header("uid") uid: String?,
-        @Url url: String
-    ): Call<ShowDetailsResponse>
+    fun fetchShow(@Url url: String): Call<ShowDetailsResponse>
 
     @GET
-    fun fetchReviews(
-        @Header("token-type") tokenType: String?,
-        @Header("access-token") accessToken: String?,
-        @Header("client") client: String?,
-        @Header("uid") uid: String?,
-        @Url url: String
-    ): Call<ReviewsResponse>
+    fun fetchReviews(@Url url: String): Call<ReviewsResponse>
 
     @POST("/reviews")
-    fun createReview(
-        @Header("token-type") tokenType: String?,
-        @Header("access-token") accessToken: String?,
-        @Header("client") client: String?,
-        @Header("uid") uid: String?,
-        @Body request: ReviewRequest
-    ): Call<ReviewResponse>
+    fun createReview(@Body request: ReviewRequest): Call<ReviewResponse>
 
     @Multipart
     @PUT("/users")
-    fun uploadPicture(
-        @Header("token-type") tokenType: String?,
-        @Header("access-token") accessToken: String?,
-        @Header("client") client: String?,
-        @Header("uid") uid: String?,
-        @Part image: MultipartBody.Part
-    ): Call<LoginResponse>
+    fun uploadPicture(@Part image: MultipartBody.Part): Call<LoginResponse>
 }

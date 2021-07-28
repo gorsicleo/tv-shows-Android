@@ -14,11 +14,11 @@ object ApiModule {
     lateinit var retrofit: ShowsApiService
 
     @ExperimentalSerializationApi
-    fun initRetrofit() {
+    fun initRetrofit(headers: List<String?>) {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
-            })
+            }).addInterceptor(HeaderInterceptor(headers))
             .build()
 
         retrofit = Retrofit.Builder()
