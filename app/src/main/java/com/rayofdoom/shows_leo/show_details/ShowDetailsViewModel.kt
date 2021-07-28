@@ -43,15 +43,10 @@ class ShowDetailsViewModel : ViewModel() {
         reviewLiveData.value = reviews
     }
 
-    fun addReview(headers: List<String?>, rating: Int, comment: String, showId: Int) {
+    fun addReview(rating: Int, comment: String, showId: Int) {
         val request = ReviewRequest(rating, comment, showId)
 
-        ApiModule.retrofit.createReview(
-            tokenType = "Bearer",
-            accessToken = headers[0],
-            client = headers[1],
-            uid = headers[2], request
-        ).enqueue(object : Callback<ReviewResponse> {
+        ApiModule.retrofit.createReview(request).enqueue(object : Callback<ReviewResponse> {
             override fun onResponse(
                 call: Call<ReviewResponse>,
                 response: Response<ReviewResponse>
@@ -72,15 +67,9 @@ class ShowDetailsViewModel : ViewModel() {
         return showDetailsLiveData
     }
 
-    fun fetchShowDetails(headers: List<String?>, endpoint: String) {
+    fun fetchShowDetails(endpoint: String) {
 
-        ApiModule.retrofit.fetchShow(
-            tokenType = "Bearer",
-            accessToken = headers[0],
-            client = headers[1],
-            uid = headers[2],
-            endpoint
-        ).enqueue(object : Callback<ShowDetailsResponse> {
+        ApiModule.retrofit.fetchShow(endpoint).enqueue(object : Callback<ShowDetailsResponse> {
             override fun onResponse(
                 call: Call<ShowDetailsResponse>,
                 response: Response<ShowDetailsResponse>
@@ -98,15 +87,9 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
 
-    fun fetchReviews(headers: List<String?>, endpoint: String) {
+    fun fetchReviews(endpoint: String) {
 
-        ApiModule.retrofit.fetchReviews(
-            tokenType = "Bearer",
-            accessToken = headers[0],
-            client = headers[1],
-            uid = headers[2],
-            endpoint
-        ).enqueue(object : Callback<ReviewsResponse> {
+        ApiModule.retrofit.fetchReviews(endpoint).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(
                 call: Call<ReviewsResponse>,
                 response: Response<ReviewsResponse>

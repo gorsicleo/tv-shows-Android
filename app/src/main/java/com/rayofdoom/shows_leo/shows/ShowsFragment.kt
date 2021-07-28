@@ -21,7 +21,9 @@ import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.networking.ApiModule
 import com.rayofdoom.shows_leo.utility_functions.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import java.io.File
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
@@ -33,7 +35,6 @@ class ShowsFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
     private val viewModel: ShowsViewModel by viewModels()
-    private var headers: List<String?> = emptyList()
 
     private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
         takePicture()
@@ -44,7 +45,7 @@ class ShowsFragment : Fragment() {
             if (success) {
                 DialogUserPanelBinding.inflate(layoutInflater)
                 //update views with new avatar
-                viewModel.uploadUserPhoto(headers, requireContext())
+                viewModel.uploadUserPhoto(requireContext())
             }
         }
 
@@ -58,6 +59,7 @@ class ShowsFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,8 +72,8 @@ class ShowsFragment : Fragment() {
             }
         }
 
-        headers = PrefsUtil.loadHeadersFromPrefs(requireActivity())
-        viewModel.fetch(headers)
+
+        viewModel.fetch()
         viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
             if (shows!=null) {
                 initRecyclerView(shows)
@@ -149,7 +151,10 @@ class ShowsFragment : Fragment() {
     }
 
 
+    @ExperimentalSerializationApi
     private fun logout() {
+        //initialize retrofit -> forget headers
+        ApiModule.initRetrofit(listOf(null,null,null))
         val sharedPrefs =
             activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPrefs.edit()) {
@@ -163,6 +168,7 @@ class ShowsFragment : Fragment() {
     }
 
 
+    @ExperimentalSerializationApi
     private fun showBottomSheet() {
         val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)

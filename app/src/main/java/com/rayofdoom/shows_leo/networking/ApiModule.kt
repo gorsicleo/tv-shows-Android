@@ -16,9 +16,10 @@ object ApiModule {
     @ExperimentalSerializationApi
     fun initRetrofit(headers: List<String?>) {
         val okhttp = OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor(headers))
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
-            }).addInterceptor(HeaderInterceptor(headers))
+            })
             .build()
 
         retrofit = Retrofit.Builder()

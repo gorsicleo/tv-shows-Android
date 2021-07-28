@@ -18,6 +18,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val PHOTO_UPLOAD_MESSAGE_SUCCESS = "Photo upload successful"
+private const val PHOTO_UPLOAD_MESSAGE_FAIL = "Photo upload failed"
+
 class ShowsViewModel : ViewModel() {
     private val showsResultLiveData: MutableLiveData<List<Show>> by lazy {
         MutableLiveData<List<Show>>()
@@ -35,14 +38,8 @@ class ShowsViewModel : ViewModel() {
     }
 
 
-    fun fetch(headers: List<String?>) {
-
-        ApiModule.retrofit.fetchShows(
-            tokenType = "Bearer",
-            accessToken = headers[0],
-            client = headers[1],
-            uid = headers[2]
-        ).enqueue(object : Callback<ShowsResponse> {
+    fun fetch() {
+        ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
             override fun onResponse(
                 call: Call<ShowsResponse>,
                 response: Response<ShowsResponse>
@@ -57,7 +54,7 @@ class ShowsViewModel : ViewModel() {
         })
     }
 
-    fun uploadUserPhoto(headers: List<String?>, context: Context) {
+    fun uploadUserPhoto(context: Context) {
 
         if (FileUtil.getImageFile(context) != null) {
             val requestFile = FileUtil.getImageFile(context)!!
@@ -66,23 +63,17 @@ class ShowsViewModel : ViewModel() {
                 "image",
                 FileUtil.getImageFile(context)?.name, requestFile
             )
-            ApiModule.retrofit.uploadPicture(
-                "Bearer",
-                headers[0],
-                headers[1],
-                headers[2],
-                profilePic
-            ).enqueue(object : Callback<LoginResponse> {
+            ApiModule.retrofit.uploadPicture(profilePic).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
                     userPhotoLiveData.value = response.body()?.user?.imageUrl
-                    Toast.makeText(context, "Photo upload successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, PHOTO_UPLOAD_MESSAGE_SUCCESS, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Toast.makeText(context, "Photo upload failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, PHOTO_UPLOAD_MESSAGE_FAIL, Toast.LENGTH_SHORT).show()
                 }
 
             })

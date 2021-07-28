@@ -47,8 +47,8 @@ class ShowDetailsFragment : Fragment() {
 
         loadHeadersFromPrefs()
 
-        viewModelShowDetails.fetchShowDetails(headers, BASE_URL + args.showId.toString())
-        viewModelShowDetails.fetchReviews(headers, BASE_URL + args.showId.toString() + "/reviews")
+        viewModelShowDetails.fetchShowDetails(BASE_URL + args.showId.toString())
+        viewModelShowDetails.fetchReviews(BASE_URL + args.showId.toString() + "/reviews")
         startViewModels()
         setClickListeners()
 
@@ -137,7 +137,6 @@ class ShowDetailsFragment : Fragment() {
                 ).show()
             } else {
                 viewModelShowDetails.addReview(
-                    headers,
                     dialogBinding.rating.rating.toInt(),
                     dialogBinding.reviewInput.text.toString(),
                     args.showId

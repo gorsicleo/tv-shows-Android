@@ -11,7 +11,7 @@ import com.rayofdoom.shows_leo.R
  * if context is provided returns true is avatar image exists, false otherwise
  */
 fun ImageView.displayAvatar(context: Context, url: String?): Boolean {
-    if (url == null) {
+    if (url == null || url == "null") {
         this.setImageResource(R.drawable.ic_profile_placeholder)
         return false
     } else {

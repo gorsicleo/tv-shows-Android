@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
+import com.rayofdoom.shows_leo.networking.ApiModule
 import com.rayofdoom.shows_leo.utility_functions.*
+import kotlinx.serialization.ExperimentalSerializationApi
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
@@ -34,12 +35,16 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val prefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userRegistered = prefs.getBoolean(LOGIN_PASSED_FLAG, false)
 
         if (userRegistered) {
+            //initialize retofit -> headers are known now
+            val headers = PrefsUtil.loadHeadersFromPrefs(requireActivity())
+            ApiModule.initRetrofit(headers)
             val action = LoginFragmentDirections.actionLoginToShows(
                 prefs.getString(
                     USERNAME,
@@ -47,10 +52,14 @@ class LoginFragment : Fragment() {
                 )!!, true
             )
             findNavController().navigate(action)
+        } else {
+            //initialize retrofit -> no headers are known at the moment
+            ApiModule.initRetrofit(listOf(null,null,null))
         }
         if (args.registerSuccess) {
             loginAfterSuccessfulRegistration()
         }
+
 
         binding.registerButton.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginToRegister()
@@ -65,11 +74,15 @@ class LoginFragment : Fragment() {
     }
 
 
+    @ExperimentalSerializationApi
     private fun setLiveDataObserver() {
         viewModel.getLoginResultLiveData().observe(this.viewLifecycleOwner) { success ->
             if (success) {
                 PrefsUtil.putHeadersToPrefs(viewModel.getHeaders(), requireActivity())
                 PrefsUtil.putUserToPrefs(viewModel.getUser(), requireActivity())
+                //initialize retofit -> headers are known now
+                val headers = PrefsUtil.loadHeadersFromPrefs(requireActivity())
+                ApiModule.initRetrofit(headers)
                 LoginFragmentDirections.actionLoginToShows(
                     binding.emailInput.text.toString(),
                     binding.rememberMeCheckbox.isChecked

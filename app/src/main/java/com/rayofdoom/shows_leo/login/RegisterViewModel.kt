@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.rayofdoom.shows_leo.model.network_models.request.RegisterRequest
 import com.rayofdoom.shows_leo.model.network_models.response.RegisterResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
-import com.rayofdoom.shows_leo.utility_functions.parseError
+import com.rayofdoom.shows_leo.utility_functions.parseAPIError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +34,7 @@ class RegisterViewModel : ViewModel() {
                 if (!response.isSuccessful){
                     val message = response.errorBody()?.string()
                     if (message != null) {
-                        Toast.makeText(context, message.parseError(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, message.parseAPIError(), Toast.LENGTH_LONG).show()
                     }
                 }
                 registerResultLiveData.value = response.isSuccessful
