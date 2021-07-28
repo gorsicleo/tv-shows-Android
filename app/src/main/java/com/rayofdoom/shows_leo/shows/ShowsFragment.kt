@@ -74,7 +74,9 @@ class ShowsFragment : Fragment() {
         headers = PrefsUtil.loadHeadersFromPrefs(requireActivity())
         viewModel.fetch(headers)
         viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
-            initRecyclerView(shows)
+            if (shows!=null) {
+                initRecyclerView(shows)
+            }
         })
         viewModel.getUserPhotoLiveData().observe(this.viewLifecycleOwner, { url ->
             PrefsUtil.updateUserImageUrl(requireActivity(), url)
