@@ -135,13 +135,8 @@ class ShowsFragment : Fragment() {
 
 
     private fun takePicture() {
-        val photoFile: File? = try {
-            FileUtil.createImageFile(requireContext())
-        } catch (ex: IOException) {
-            // Error occurred while creating the File
-            null
-        }
-        // Continue only if the File was successfully created
+        val photoFile: File?= FileUtil.createImageFile(requireContext())
+
         photoFile?.also { photo ->
             context?.apply {
                 val photoURI: Uri = FileProvider.getUriForFile(
@@ -153,7 +148,6 @@ class ShowsFragment : Fragment() {
             }
         }
     }
-//TODO makni clear cache za sve slike osim avatara u toolbaru
 
 
     private fun logout() {
@@ -176,7 +170,6 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(dialogBinding.root)
 
         dialogBinding.apply {
-            //initializing components of bottom sheet
             userPanelEmail.text = args.username
             val avatarUrl = PrefsUtil.loadUserFromPrefs(requireActivity())?.imageUrl
             dialogBinding.userPanelPhoto.displayAvatar(requireContext(), avatarUrl)
