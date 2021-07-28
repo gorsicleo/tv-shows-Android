@@ -47,8 +47,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="64dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
@@ -79,7 +81,7 @@
                 android:layout_marginBottom="29dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                tools:text="@string/krv_nije_voda_description" />
+                tools:text="@tools:sample/lorem/random" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="64dp"
                 tools:listitem="@layout/item_review" />
 
 
@@ -149,6 +151,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

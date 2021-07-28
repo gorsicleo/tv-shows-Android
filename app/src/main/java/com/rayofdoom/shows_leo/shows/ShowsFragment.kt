@@ -129,7 +129,7 @@ class ShowsFragment : Fragment() {
             Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
                 .show()
         }
-        binding.showsRecycler.isInvisible = value.not()
+        binding.showsRecycler.isInvisible = value
         binding.noShowsLayout.isVisible = value
     }
 
