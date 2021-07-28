@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">Shows-Leo</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
     <string name="login_message">In order to continue please log in</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="repeat_password">Repeat password</string>
     <string name="shows_title">Shows</string>
     <string name="no_shows_message">Your shows are not showing. Get it? </string>
     <string name="botom_sheet_title">Write a review</string>
@@ -26,8 +24,58 @@
     <string name="change_profile_photo">Change profile photo</string>
     <string name="logout">Logout</string>
     <string name="no_permission">Please check your permissions in settings.</string>
-    <string name="settings">Settings</string>
-    <string name="registration_successful">Registration successful!</string>
-    <string name="passwords_do_not_match">Passwords do not match</string>
-    <string name="login_failed">Login failed!</string>
+    <string name="settings">Setings</string>
+    <string name="binding_null">Clear switch is null, something went wrong!</string>
+    <string name="krv_nije_voda_description">Život piše drame, a svaki čovjek čuva barem jednu tajnu…
+        No, neke stvari bolje je čuvati unutar svoja četiri zida. Serija je inspirirana svakodnevnim
+        životnim pričama koje pogađaju brojne obitelji, poput nestanka člana obitelji, upadanja u
+        zamku nagomilanih dugova, iznenadnog kraha braka zbog supružnikove prevare, borbe za
+        skrbništvo nad malodobnim djetetom, ovisnosti o kocki ili problema s neposlušnom djecom. © RTL</string>
+
+    <string name="krim_tim_2_description">Troje policijskih inspektora bori se protiv zločina o
+        kakvima ste do sada čitali samo u novinama. Napeta serija kroz svoj će igrani i dokumentarni
+        pristup, takozvani lažni dokumentarizam - televizijski format "scripted reality", gledateljima
+        pružiti osjećaj da su uključeni u otkrivanje i rješavanje policijskih slučajeva koji su se
+        zaista dogodili. Zahvaljujući dokumentarnom načinu pripovijedanja, realističnim i emotivnim
+        prikazima, gledatelj je uvučen u odgonetavanje motiva zločina. © RTL</string>
+
+    <string name="sudnica_description">RTL na male ekrane donosi "Sudnicu" - svjetski uspješan format
+        koji će zadovoljiti apetite širokog gledateljstva najzanimljivijim primjerima iz domaće sudske
+        prakse! Teško je i naslutiti kakvi se sve slučajevi iz grane obiteljskog prava skrivaju na policama
+        sudskih arhiva: najbizarniji oblici bračnih nevjera, nesmiljene borbe za skrbništvo nad
+        djecom, borba za naslijeđe nekad idiličnih parova, samo su neke od tema koje obrađuje "Sudnica". © RTL</string>
+
+    <string name="bibin_svijet_description">Mali dućan na kraju grada mjesto je gdje blagajnica 
+        Biba Fruk i njeni kolege Đurđa, Vlado, Milivoj i poslovođa Piškorić marljivo rade i trude se 
+        obaviti posao najbolje što znaju, ali, kako to obično biva - uvijek nešto krene po krivu! © RTL</string>
+
+    <string name="zabranjena_ljubav_description">Blizanci Petra Novak i Danijel Lončar, razdvojeni 
+        odmah nakon rođenja, ne znaju jedno za drugo, odrastaju u različitim obiteljima, no povezuje 
+        ih snažan osjećaj da im nešto nedostaje zbog čega njihov život nije potpun. Dvadeset godina 
+        kasnije sudbonosan susret budi nagomilane osjećaje, Petra i Danijel se zaljubljuju i napokon 
+        pronalaze ono nešto što im je nedostajalo cijeli život. No kada se otkrije istina, njihova
+        ljubav postaje zabranjena, uništava im snove i otkriva uznemirujuće tajne. © RTL</string>
+
+    <string name="ne_daj_se_nina_desription">Ovo je priča o Nini, običnoj djevojci koja se probija
+        u svijetu kojem ni po čemu ne pripada, začinjenim dramskim zapletima i dobrim humorom!
+        U svijetu visoke mode, izgled, ljepota i novac odrednice su uspjeha. U taj svijet lažnog
+        sjaja ulazi Nina (Lana Gojak), čista suprotnost svemu što on predstavlja. Ona je neatraktivnog
+        izgleda, ali marljiva, inteligentna i obrazovana djevojka, kojoj ponekad nedostaje ponešto
+        manira, društvene snalažljivosti, samopouzdanja i estetske uglađenosti. © RTL</string>
+
+    <string name="kbc_description">U RTL-ovom kliničko-bolničkom centru nema mjesta strahu jer u njemu
+        rade hrabri liječnici i medicinski stručnjaci koji se svakodnevno susreću s neobičnim slučajevima,
+        pronalaze lijek za nesvakidašnje bolesti i spašavaju unesrećene. Medicinski tim čine pravi stručnjaci,
+        mladi i uspješni liječnici, glavne medicinske sestre s dugogodišnjim profesionalnim iskustvom, te sestre
+        i bolničari. Natalija Ćurić, Alen Borić, Gordan Matijević, Marija Sarač, Marina Kralj, Katarina Pavlović
+        i Ognjen Labaš šestero je doktora specijalizanata koji zbrinjavaju najugoroženije pacijente,
+        koji dolaze na hitni prijem KBC-a. Njih tumače stvarni doktori, koji uistinu spašavaju živote
+        drugih u domovima zdravlja, bolnicama, klinikama i bolničkim centrima diljem Hrvatske.
+        Ako ste pomislili da upravo oni vode glavnu riječ u izrazito stresnim situacijama u kojima život pacijenata
+        visi o niti, bolest i nesreće su zapravo glavni pokretači priče. Tako će gledatelji imati priliku
+        vidjeti što se događa s pacijentom koji hitno mora na operaciju potkoljenice nakon što je sudjelovao
+        u prometnoj nesreći, kako pomoći momku koji se boji liječnika, igle i krvi, a u obraz mu se zarila
+        udica za pecanje, kako liječiti opekline viskokog stupnja nakon što je neslana šala pošla po zlu
+        ili kako pomoći unesrećenom nakon što je dobio alergijsku reakciju na ubode pčela.</string>
+
 </resources>

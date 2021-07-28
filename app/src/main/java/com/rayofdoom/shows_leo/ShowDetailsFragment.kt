@@ -1,6 +1,6 @@
-package com.rayofdoom.shows_leo.show_details
+package com.rayofdoom.shows_leo
 
-import android.content.Context
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,23 +12,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
-import com.rayofdoom.shows_leo.utility_functions.displayShowImage
-
-private const val ACCESS_TOKEN = "access-token"
-private const val CLIENT = "client"
-private const val UID = "uid"
-private const val BASE_URL = "https://tv-shows.infinum.academy/shows/"
+import com.rayofdoom.shows_leo.utility_functions.getCumulativeRatingForShow
+import com.rayofdoom.shows_leo.utility_functions.parseUsernameFromEmail
 
 class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private var reviewsAdapter: ItemReviewAdapter? = null
-    private var headers: List<String?> = emptyList<String>()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
     private val viewModelShowDetails: ShowDetailsViewModel by viewModels()
@@ -44,23 +38,10 @@ class ShowDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadHeadersFromPrefs()
-
-        viewModelShowDetails.fetchShowDetails(BASE_URL + args.showId.toString())
-        viewModelShowDetails.fetchReviews(BASE_URL + args.showId.toString() + "/reviews")
-        startViewModels()
-        setClickListeners()
-
-    }
-
-    private fun setClickListeners() {
+        startViewModel()
         binding.apply {
             backButton?.setOnClickListener {
-                ShowDetailsFragmentDirections.actionShowDetailsToShows(
-                    args.username,
-                    false
-                ).also {
+                ShowDetailsFragmentDirections.actionShowDetailsToShows(args.username, false).also {
                     findNavController().navigate(it)
                 }
             }
@@ -75,42 +56,26 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
-    private fun loadHeadersFromPrefs() {
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        headers = listOf(
-            sharedPrefs.getString(ACCESS_TOKEN, null),
-            sharedPrefs.getString(CLIENT, null),
-            sharedPrefs.getString(
-                UID, null
-            )
-        )
-    }
 
-
-    private fun startViewModels() {
-
+    private fun startViewModel() {
         viewModelShowDetails.apply {
+            initShowDetailsLiveData()
+            getShowDetailsLiveData().observe(viewLifecycleOwner,{shows ->
+                displayShowDetails(shows[args.showId])
+            })
             initReviews()
             getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
-                if (reviews!=null) {
-                    initRecyclerView(reviews)
-                }
-            })
-            getShowDetailsLiveData().observe(viewLifecycleOwner, { show ->
-                if (show!=null) {
-                    displayShowDetails(show)
-                }
+                initRecyclerView(reviews)
             })
         }
     }
 
     private fun displayShowDetails(show: Show) {
         binding.apply {
-            showDetailsDescription.text = show.showDescription
-            show.imageResource?.let { showDetailsImage.displayShowImage(requireContext(), it) }
+            showDetailsDescription.setText(show.showDescription)
+            showDetailsImage.setImageResource(show.imageResource)
             collapsingToolbar?.title = show.showTitle
             showDetailsTitle?.text = show.showTitle
-            displayAverage(show)
         }
     }
 
@@ -118,12 +83,13 @@ class ShowDetailsFragment : Fragment() {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter =
-            ItemReviewAdapter(reviews, requireContext())
+            ItemReviewAdapter(reviews, args.username.parseUsernameFromEmail(), requireContext())
+        displayAverage(reviews)
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
     private fun showBottomSheet() {
-        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialog)
         val dialogBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         dialog.show()
@@ -137,28 +103,28 @@ class ShowDetailsFragment : Fragment() {
                 ).show()
             } else {
                 viewModelShowDetails.addReview(
-                    dialogBinding.rating.rating.toInt(),
-                    dialogBinding.reviewInput.text.toString(),
-                    args.showId
+                    Review(
+                        args.username.parseUsernameFromEmail(),
+                        dialogBinding.reviewInput.text.toString(),
+                        R.drawable.ic_profile_placeholder,
+                        dialogBinding.rating.rating.toInt()
+                    )
                 )
                 dialog.dismiss()
-
             }
 
         }
-
-
     }
 
-
-    private fun displayAverage(show: Show) {
+    private fun displayAverage(reviews: List<Review>) {
+        val showRatingData = reviews.getCumulativeRatingForShow()
         binding.showDetailsReviewData.text =
             getString(
                 R.string.display_average_format,
-                show.noOfReviews,
-                show.averageRating
+                showRatingData.numberOfReviews,
+                showRatingData.averageScore
             )
-        binding.showDetailsRatingBar.rating = show.averageRating?.toFloat() ?: 0.0f
+        binding.showDetailsRatingBar.rating = showRatingData.averageScore.toFloat()
     }
 
 

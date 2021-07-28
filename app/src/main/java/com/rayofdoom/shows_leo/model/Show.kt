@@ -1,14 +1,11 @@
 package com.rayofdoom.shows_leo.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
-@Serializable
 data class Show(
-    @SerialName("id")val showId: Int,
-    @SerialName("title")val showTitle: String,
-    @SerialName("description")val showDescription: String?,
-    @SerialName("image_url")val imageResource: String?,
-    @SerialName("average_rating")val averageRating: Double?,
-    @SerialName("no_of_reviews")val noOfReviews: Int
+    val showId: Int,
+    val showTitle: String,
+    @StringRes val showDescription: Int,
+    @DrawableRes val imageResource: Int
 )

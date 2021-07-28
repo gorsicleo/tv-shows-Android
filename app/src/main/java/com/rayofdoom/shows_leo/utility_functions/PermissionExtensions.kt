@@ -16,16 +16,15 @@ fun Fragment.preparePermissionsContract(
             showPermissionsDeniedSnackbar(it)
         }
     }
-) =
-    registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsMap ->
-        permissionsMap.entries.forEach {
-            if (it.value) {
-                onPermissionsGranted()
-            } else {
-                onPermissionsDenied()
-            }
+) = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsMap ->
+    permissionsMap.entries.forEach {
+        if (it.value) {
+            onPermissionsGranted()
+        } else {
+            onPermissionsDenied()
         }
     }
+}
 
 /**
  * Displays the default Snackbar with Action to open the Application Details

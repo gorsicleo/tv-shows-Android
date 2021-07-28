@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowsFragment">
+    tools:context=".ShowsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar_container"
@@ -117,7 +117,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <fragment
-            android:name="com.rayofdoom.shows_leo.show_details.ShowDetailsFragment"
+            android:name="com.rayofdoom.shows_leo.ShowDetailsFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"

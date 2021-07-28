@@ -1,4 +1,4 @@
-package com.rayofdoom.shows_leo.show_details
+package com.rayofdoom.shows_leo
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 
 class ItemReviewAdapter(
     private var reviews: List<Review>,
+    private var username: String,
     private var context: Context
 ) : RecyclerView.Adapter<ItemReviewAdapter.ItemReviewViewHolder>() {
 
@@ -26,18 +27,30 @@ class ItemReviewAdapter(
         return reviews.size
     }
 
+    fun addItem(newReviewList: List<Review>) {
+        reviews = newReviewList
+        notifyItemInserted(reviews.lastIndex)
+    }
 
 
     inner class ItemReviewViewHolder(private val binding: ItemReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
             binding.apply {
-                itemReviewUsername.text = review.user.email
-                itemReviewUserReview.text = review.comment
-                itemReviewRating.text = review.rating.toString()
-                itemReviewUserProfilePicture.displayAvatar(context, review.user.imageUrl)
+                itemReviewUsername.text = review.userName
+                itemReviewUserReview.text = review.userReview
+                itemReviewRating.text = review.userRating.toString()
+                if (username == review.userName){
+                    val success = itemReviewUserProfilePicture.displayAvatar(context)
+                    if (!success) {
+                        itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                    }
+                } else {
+                    itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                }
             }
         }
     }
+
 
 }
