@@ -23,7 +23,6 @@ import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.*
 import java.io.File
-import java.io.IOException
 
 private const val LOGIN_PASSED_FLAG = "passedLogin"
 private const val USERNAME = "username"
@@ -43,9 +42,9 @@ class ShowsFragment : Fragment() {
     private val cameraContract =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
+                DialogUserPanelBinding.inflate(layoutInflater)
                 //update views with new avatar
-                val uploadImageUrl = viewModel.uploadUserPhoto(headers, requireContext())
+                viewModel.uploadUserPhoto(headers, requireContext())
             }
         }
 
@@ -95,7 +94,7 @@ class ShowsFragment : Fragment() {
         binding.logOutButton.apply {
             displayAvatar(
                 requireContext(),
-                PrefsUtil.loadUserFromPrefs(requireActivity())?.imageUrl
+                PrefsUtil.loadUserFromPrefs(requireActivity()).imageUrl
             )
             setOnClickListener {
                 showBottomSheet()
@@ -171,7 +170,7 @@ class ShowsFragment : Fragment() {
 
         dialogBinding.apply {
             userPanelEmail.text = args.username
-            val avatarUrl = PrefsUtil.loadUserFromPrefs(requireActivity())?.imageUrl
+            val avatarUrl = PrefsUtil.loadUserFromPrefs(requireActivity()).imageUrl
             dialogBinding.userPanelPhoto.displayAvatar(requireContext(), avatarUrl)
             userPanelLogoutButton.setOnClickListener {
                 dialog.dismiss()
