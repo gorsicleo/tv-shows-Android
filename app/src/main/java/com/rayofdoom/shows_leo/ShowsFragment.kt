@@ -1,25 +1,53 @@
 package com.rayofdoom.shows_leo
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isInvisible
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
-import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.utility_functions.FileUtil
+import com.rayofdoom.shows_leo.utility_functions.displayAvatar
+import com.rayofdoom.shows_leo.utility_functions.preparePermissionsContract
+import java.io.File
+import java.io.IOException
+
+private const val LOGIN_PASSED_FLAG = "passedLogin"
+private const val USERNAME = "username"
 
 class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
+    private val viewModel: ShowsViewModel by viewModels()
 
-    private val shows = fillShowsData()
+    private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
+        takePicture()
+    })
+
+    private val cameraContract =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
+                //update photos with new avatar
+                dialogBinding.userPanelPhoto.displayAvatar(requireContext())
+                binding.logOutButton.displayAvatar(requireContext())
+            }
+        }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,39 +60,47 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.initShows()
+        viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
+            initRecyclerView(shows)
+        })
 
-
-
-        initRecyclerView()
-        binding.clearSwitch?.let { switch ->
-            switch.setOnClickListener {
-                if (switch.isChecked) {
-                    Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
-                        .show()
-                }
-                binding.showsRecycler.isInvisible = switch.isChecked.not()
-                binding.noShowsLayout.isVisible = switch.isChecked
-
+        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPrefs.edit()) {
+            if (args.rememberMeChecked) {
+                putBoolean(LOGIN_PASSED_FLAG, true)
+                putString(USERNAME, args.username)
+                apply()
             }
         }
 
-        binding.logOutButton.setOnClickListener {
-            ShowsFragmentDirections.actionShowsToLogin().also {
-                findNavController().navigate(it)
+
+        binding.clearSwitch?.setOnClickListener {
+            if (binding.clearSwitch!=null) {
+                clearShows(binding.clearSwitch!!.isChecked)
+            } else{
+                Toast.makeText(context, getString(R.string.binding_null), Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.logOutButton.apply {
+            displayAvatar(requireContext())
+            setOnClickListener {
+                showBottomSheet()
+            }
+        }
+
     }
 
 
-    private fun initRecyclerView() {
-
+    private fun initRecyclerView(shows: List<Show>) {
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.showsRecycler.adapter = ShowsAdapter(shows) { show ->
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,
-                show.showId
+                show.showId - 1
             ).also {
                 findNavController().navigate(it)
             }
@@ -74,5 +110,66 @@ class ShowsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun clearShows(isChecked: Boolean) {
+        if (isChecked) {
+            Toast.makeText(context, getString(R.string.shows_cleared), Toast.LENGTH_SHORT)
+                .show()
+        }
+            binding.showsRecycler.isVisible = isChecked.not()
+            binding.noShowsLayout.isVisible = isChecked
+
+    }
+
+
+    private fun takePicture() {
+        val photoFile: File? = FileUtil.createImageFile(requireContext())
+        photoFile?.also { photo ->
+            context?.apply {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "${this.applicationContext.packageName}.fileprovider",
+                    photo
+                )
+                cameraContract.launch(photoURI)
+            }
+        }
+    }
+
+    private fun logout() {
+        val sharedPrefs =
+            activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPrefs.edit()) {
+            putBoolean(LOGIN_PASSED_FLAG, false)
+            putString(USERNAME, null)
+            apply()
+            findNavController().navigate(ShowsFragmentDirections.actionShowsToLogin())
+        }
+    }
+
+
+    private fun showBottomSheet() {
+        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialog)
+        val dialogBinding = DialogUserPanelBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialogBinding.apply {
+            userPanelEmail.text = args.username
+            val avatarExists = dialogBinding.userPanelPhoto.displayAvatar(requireContext())
+            if (!avatarExists) {
+                userPanelPhoto.setImageResource(R.drawable.ic_profile_placeholder)
+            }
+            userPanelLogoutButton.setOnClickListener {
+                dialog.dismiss()
+                logout()
+            }
+            userPanelChangeProfilePhotoButton.setOnClickListener {
+                cameraPermissionForPhoto.launch(arrayOf(android.Manifest.permission.CAMERA))
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
     }
 }

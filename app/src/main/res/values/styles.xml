@@ -54,6 +54,28 @@
         <item name="boxStrokeColor">@color/review_field_stroke_selector</item>
     </style>
 
+    <style name="button_style_user_panel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:backgroundTint">@drawable/button_style_background</item>
+        <item name="android:textColor">@drawable/button_style_text_color</item>
+        <item name="android:clickable">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">22dp</item>
+    </style>
+
+    <style name="button_style_user_panel_logout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:backgroundTint">@color/rating_bar_purple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">22dp</item>
+    </style>
+
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
     </style>
@@ -61,6 +83,7 @@
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
 
 
 

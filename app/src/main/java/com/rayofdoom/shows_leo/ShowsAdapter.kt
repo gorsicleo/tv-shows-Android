@@ -24,7 +24,6 @@ class ShowsAdapter(
         return items.size
     }
 
-
     inner class ShowsViewHolder(private val binding: ViewShowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Show) {

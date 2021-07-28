@@ -1,13 +1,17 @@
 package com.rayofdoom.shows_leo
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rayofdoom.shows_leo.databinding.ItemReviewBinding
 import com.rayofdoom.shows_leo.model.Review
+import com.rayofdoom.shows_leo.utility_functions.displayAvatar
 
 class ItemReviewAdapter(
     private var reviews: List<Review>,
+    private var username: String,
+    private var context: Context
 ) : RecyclerView.Adapter<ItemReviewAdapter.ItemReviewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemReviewViewHolder {
@@ -36,9 +40,15 @@ class ItemReviewAdapter(
                 itemReviewUsername.text = review.userName
                 itemReviewUserReview.text = review.userReview
                 itemReviewRating.text = review.userRating.toString()
-                itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                if (username == review.userName){
+                    val success = itemReviewUserProfilePicture.displayAvatar(context)
+                    if (!success) {
+                        itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                    }
+                } else {
+                    itemReviewUserProfilePicture.setImageResource(review.userProfilePicture)
+                }
             }
-
         }
     }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ShowsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -37,7 +38,6 @@
                     android:backgroundTint="@color/white"
                     android:checked="false"
                     android:focusable="true"
-                    android:src="@drawable/clear_icon"
                     android:text="@string/switch_label"
                     android:textColor="@color/black"
                     android:textSize="12sp"
@@ -51,7 +51,9 @@
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:focusable="true"
-                    android:src="@drawable/log_out_button"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_profile_placeholder"
+                    android:scaleType="fitCenter"
                     app:layout_collapseMode="pin" />
 
 
@@ -62,6 +64,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:fitsSystemWindows="true"
         android:id="@+id/no_shows_layout"
         android:visibility="invisible"
         android:layout_width="match_parent"

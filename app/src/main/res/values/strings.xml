@@ -20,6 +20,12 @@
     <string name="switch_label">Clear list</string>
     <string name="switch_label_reviews">Load dummy reviews</string>
     <string name="reviews">Reviews</string>
+    <string name="remember_me_checkbox">Remember me</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="logout">Logout</string>
+    <string name="no_permission">Please check your permissions in settings.</string>
+    <string name="settings">Setings</string>
+    <string name="binding_null">Clear switch is null, something went wrong!</string>
     <string name="krv_nije_voda_description">Život piše drame, a svaki čovjek čuva barem jednu tajnu…
         No, neke stvari bolje je čuvati unutar svoja četiri zida. Serija je inspirirana svakodnevnim
         životnim pričama koje pogađaju brojne obitelji, poput nestanka člana obitelji, upadanja u
