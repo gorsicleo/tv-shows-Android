@@ -10,7 +10,6 @@ import com.rayofdoom.shows_leo.model.network_models.response.LoginResponse
 import com.rayofdoom.shows_leo.model.network_models.response.ShowsResponse
 import com.rayofdoom.shows_leo.networking.ApiModule
 import com.rayofdoom.shows_leo.utility_functions.FileUtil
-import com.rayofdoom.shows_leo.utility_functions.PrefsUtil
 import com.rayofdoom.shows_leo.utility_functions.fillShowsData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

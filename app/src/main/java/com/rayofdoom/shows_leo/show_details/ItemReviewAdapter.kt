@@ -26,11 +26,6 @@ class ItemReviewAdapter(
         return reviews.size
     }
 
-    //maybe in the future someone will need it...
-    fun addItem(newReviewList: List<Review>) {
-        reviews = newReviewList
-        notifyItemInserted(reviews.lastIndex)
-    }
 
 
     inner class ItemReviewViewHolder(private val binding: ItemReviewBinding) :
