@@ -92,10 +92,14 @@ class ShowDetailsFragment : Fragment() {
         viewModelShowDetails.apply {
             initReviews()
             getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
-                initRecyclerView(reviews)
+                if (reviews!=null) {
+                    initRecyclerView(reviews)
+                }
             })
             getShowDetailsLiveData().observe(viewLifecycleOwner, { show ->
-                displayShowDetails(show)
+                if (show!=null) {
+                    displayShowDetails(show)
+                }
             })
         }
     }
