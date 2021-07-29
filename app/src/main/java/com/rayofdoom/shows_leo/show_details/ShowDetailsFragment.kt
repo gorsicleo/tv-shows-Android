@@ -13,11 +13,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.R
+import com.rayofdoom.shows_leo.ShowsApp
 import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.utility_functions.displayShowImage
+import com.rayofdoom.shows_leo.utility_functions.mapToShow
 
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
@@ -31,7 +33,10 @@ class ShowDetailsFragment : Fragment() {
     private var headers: List<String?> = emptyList<String>()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-    private val viewModelShowDetails: ShowDetailsViewModel by viewModels()
+    private val viewModelShowDetails: ShowDetailsViewModel by viewModels{
+        ShowDetailsViewModelFactory((requireActivity().application as ShowsApp).showsDatabase)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +52,8 @@ class ShowDetailsFragment : Fragment() {
 
         loadHeadersFromPrefs()
 
-        viewModelShowDetails.fetchShowDetails(BASE_URL + args.showId.toString())
-        viewModelShowDetails.fetchReviews(BASE_URL + args.showId.toString() + "/reviews")
+        viewModelShowDetails.fetchShowDetails(BASE_URL + args.showId.toString(),args.showId.toString())
+        viewModelShowDetails.fetchReviews(BASE_URL + args.showId.toString() + "/reviews",args.showId.toString())
         startViewModels()
         setClickListeners()
 
@@ -96,9 +101,10 @@ class ShowDetailsFragment : Fragment() {
                     initRecyclerView(reviews)
                 }
             })
-            getShowDetailsLiveData().observe(viewLifecycleOwner, { show ->
+            //otkud ti showID??
+            getShowDetails(args.showId.toString()).observe(viewLifecycleOwner, { show ->
                 if (show!=null) {
-                    displayShowDetails(show)
+                    displayShowDetails(show.mapToShow())
                 }
             })
         }

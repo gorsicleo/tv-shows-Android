@@ -3,18 +3,20 @@ package com.rayofdoom.shows_leo.show_details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rayofdoom.shows_leo.database.ShowsDatabase
+import com.rayofdoom.shows_leo.database.entities.ShowEntity
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
 import com.rayofdoom.shows_leo.model.network_models.request.ReviewRequest
 import com.rayofdoom.shows_leo.model.network_models.response.*
 import com.rayofdoom.shows_leo.networking.ApiModule
-import com.rayofdoom.shows_leo.utility_functions.fillReviewData
-import com.rayofdoom.shows_leo.utility_functions.fillShowsData
+import com.rayofdoom.shows_leo.utility_functions.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executors
 
-class ShowDetailsViewModel : ViewModel() {
+class ShowDetailsViewModel(val database: ShowsDatabase) : ViewModel() {
 
     private var reviews: MutableList<Review> = mutableListOf()
     private val reviewLiveData: MutableLiveData<List<Review>> by lazy {
@@ -63,11 +65,11 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
 
-    fun getShowDetailsLiveData(): LiveData<Show> {
-        return showDetailsLiveData
+    fun getShowDetails(showId: String): LiveData<ShowEntity> {
+        return database.showDao().getShow(showId)
     }
 
-    fun fetchShowDetails(endpoint: String) {
+    fun fetchShowDetails(endpoint: String,showId: String) {
 
         ApiModule.retrofit.fetchShow(endpoint).enqueue(object : Callback<ShowDetailsResponse> {
             override fun onResponse(
@@ -78,8 +80,8 @@ class ShowDetailsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<ShowDetailsResponse>, t: Throwable) {
-                //in case of failure load dummy data
-                showDetailsLiveData.value = fillShowsData()[0]
+                //in case of failure load database data
+                showDetailsLiveData.value = database.showDao().getShow(showId).value?.mapToShow()
             }
 
         })
@@ -87,20 +89,22 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
 
-    fun fetchReviews(endpoint: String) {
+    fun fetchReviews(endpoint: String,showId: String) {
 
         ApiModule.retrofit.fetchReviews(endpoint).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(
                 call: Call<ReviewsResponse>,
                 response: Response<ReviewsResponse>
             ) {
-                response.body()?.reviews?.let { reviews.addAll(it) }
-                reviewLiveData.value = reviews
+                reviewLiveData.value = response.body()?.reviews
+                Executors.newSingleThreadExecutor().execute {
+                    database.reviewDao().insertAllReviews(response.body()?.reviews!!.mapToReviewEntityList())
+                }
             }
 
             override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
-                //in case of failure load dummy data
-                reviewLiveData.value = fillReviewData()
+                //in case of failure load database data
+                reviewLiveData.value = database.reviewDao().getReviews(showId).value?.mapToReviewsList()
             }
 
         })

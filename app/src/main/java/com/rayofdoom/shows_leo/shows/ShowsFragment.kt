@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rayofdoom.shows_leo.R
+import com.rayofdoom.shows_leo.ShowsApp
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowsBinding
 import com.rayofdoom.shows_leo.model.Show
@@ -34,7 +35,10 @@ class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
-    private val viewModel: ShowsViewModel by viewModels()
+    private val viewModel: ShowsViewModel by viewModels {
+        ShowViewModelFactory((requireActivity().application as ShowsApp).showsDatabase)
+    }
+
 
     private val cameraPermissionForPhoto = preparePermissionsContract(onPermissionsGranted = {
         takePicture()
@@ -74,9 +78,18 @@ class ShowsFragment : Fragment() {
 
 
         viewModel.fetch()
-        viewModel.getShowsLiveData().observe(this.viewLifecycleOwner, { shows ->
-            if (shows!=null) {
-                initRecyclerView(shows)
+        viewModel.getShows().observe(this.viewLifecycleOwner, { shows ->
+            if (shows != null) {
+                initRecyclerView(shows.map {
+                    Show(
+                        it.showId,
+                        it.showTitle,
+                        it.showDescription,
+                        it.imageResource,
+                        it.averageRating,
+                        it.noOfReviews
+                    )
+                })
             }
         })
         viewModel.getUserPhotoLiveData().observe(this.viewLifecycleOwner, { url ->
@@ -136,7 +149,7 @@ class ShowsFragment : Fragment() {
 
 
     private fun takePicture() {
-        val photoFile: File?= FileUtil.createImageFile(requireContext())
+        val photoFile: File? = FileUtil.createImageFile(requireContext())
 
         photoFile?.also { photo ->
             context?.apply {
@@ -154,7 +167,7 @@ class ShowsFragment : Fragment() {
     @ExperimentalSerializationApi
     private fun logout() {
         //initialize retrofit -> forget headers
-        ApiModule.initRetrofit(listOf(null,null,null))
+        ApiModule.initRetrofit(listOf(null, null, null))
         val sharedPrefs =
             activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPrefs.edit()) {
