@@ -30,4 +30,5 @@
     <string name="registration_successful">Registration successful!</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="login_failed">Login failed!</string>
+    <string name="empty_state_reviews">No reviews, start by creating one!</string>
 </resources>

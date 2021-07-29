@@ -18,7 +18,9 @@ import com.rayofdoom.shows_leo.databinding.DialogAddReviewBinding
 import com.rayofdoom.shows_leo.databinding.FragmentShowDetailsBinding
 import com.rayofdoom.shows_leo.model.Review
 import com.rayofdoom.shows_leo.model.Show
+import com.rayofdoom.shows_leo.utility_functions.PrefsUtil
 import com.rayofdoom.shows_leo.utility_functions.displayShowImage
+import com.rayofdoom.shows_leo.utility_functions.mapToReviewsList
 import com.rayofdoom.shows_leo.utility_functions.mapToShow
 
 private const val ACCESS_TOKEN = "access-token"
@@ -33,7 +35,7 @@ class ShowDetailsFragment : Fragment() {
     private var headers: List<String?> = emptyList<String>()
 
     private val args: ShowDetailsFragmentArgs by navArgs()
-    private val viewModelShowDetails: ShowDetailsViewModel by viewModels{
+    private val viewModelShowDetails: ShowDetailsViewModel by viewModels {
         ShowDetailsViewModelFactory((requireActivity().application as ShowsApp).showsDatabase)
     }
 
@@ -52,8 +54,14 @@ class ShowDetailsFragment : Fragment() {
 
         loadHeadersFromPrefs()
 
-        viewModelShowDetails.fetchShowDetails(BASE_URL + args.showId.toString(),args.showId.toString())
-        viewModelShowDetails.fetchReviews(BASE_URL + args.showId.toString() + "/reviews",args.showId.toString())
+        viewModelShowDetails.fetchShowDetails(
+            BASE_URL + args.showId.toString(),
+            args.showId.toString()
+        )
+        viewModelShowDetails.fetchReviews(
+            BASE_URL + args.showId.toString() + "/reviews",
+            args.showId.toString()
+        )
         startViewModels()
         setClickListeners()
 
@@ -71,7 +79,7 @@ class ShowDetailsFragment : Fragment() {
             }
             clearSwitch?.apply {
                 setOnClickListener {
-                    viewModelShowDetails.loadDummyReviews(isChecked)
+                    //viewModelShowDetails.loadDummyReviews(isChecked)
                 }
             }
             buttonWriteReview.setOnClickListener {
@@ -95,18 +103,26 @@ class ShowDetailsFragment : Fragment() {
     private fun startViewModels() {
 
         viewModelShowDetails.apply {
-            initReviews()
-            getReviewsLiveData().observe(viewLifecycleOwner, { reviews ->
-                if (reviews!=null) {
-                    initRecyclerView(reviews)
+            getReviewsLiveData(args.showId.toString()).observe(viewLifecycleOwner, { reviews ->
+                if (reviews != null) {
+                    initRecyclerView(reviews.mapToReviewsList())
+                    if (reviews.isEmpty()){
+                        binding.reviewsEmptyState?.visibility  = View.VISIBLE
+                    }
+                } else {
+                    binding.reviewsEmptyState?.visibility  = View.VISIBLE
                 }
             })
-            //otkud ti showID??
-            getShowDetails(args.showId.toString()).observe(viewLifecycleOwner, { show ->
-                if (show!=null) {
+            getShowDetailsLiveData(args.showId.toString()).observe(viewLifecycleOwner, { show ->
+                if (show != null) {
                     displayShowDetails(show.mapToShow())
                 }
             })
+
+            getUnUploadedReviewsLiveData(args.showId.toString()).observe(viewLifecycleOwner,
+                { reviews ->
+                    viewModelShowDetails.tryToUpload(reviews)
+                })
         }
     }
 
@@ -124,7 +140,7 @@ class ShowDetailsFragment : Fragment() {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         reviewsAdapter =
-            ItemReviewAdapter(reviews, requireContext())
+            ItemReviewAdapter(reviews.reversed(), requireContext())
         binding.reviewsRecycler.adapter = reviewsAdapter
     }
 
@@ -142,10 +158,12 @@ class ShowDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
+                binding.reviewsEmptyState?.visibility = View.GONE
                 viewModelShowDetails.addReview(
                     dialogBinding.rating.rating.toInt(),
                     dialogBinding.reviewInput.text.toString(),
-                    args.showId
+                    args.showId,
+                    PrefsUtil.loadUserFromPrefs(requireActivity())
                 )
                 dialog.dismiss()
 
