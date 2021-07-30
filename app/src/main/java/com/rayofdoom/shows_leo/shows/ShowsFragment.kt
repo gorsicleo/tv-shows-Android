@@ -90,20 +90,17 @@ class ShowsFragment : Fragment() {
                         it.noOfReviews
                     )
                 })
+                if (shows.isEmpty()){
+                    clearShows(true)
+                }
+            } else {
+                clearShows(true)
             }
         })
         viewModel.getUserPhotoLiveData().observe(this.viewLifecycleOwner, { url ->
             PrefsUtil.updateUserImageUrl(requireActivity(), url)
             binding.logOutButton.displayAvatar(requireContext(), url)
         })
-
-
-
-        binding.clearSwitch?.let { switch ->
-            switch.setOnClickListener {
-                clearShows(switch.isChecked)
-            }
-        }
 
 
         binding.logOutButton.apply {

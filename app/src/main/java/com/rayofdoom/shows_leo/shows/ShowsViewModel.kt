@@ -47,6 +47,7 @@ class ShowsViewModel(val database: ShowsDatabase) : ViewModel() {
                 response: Response<ShowsResponse>
             ) {
                 showsResultLiveData.value = response.body()?.shows
+                //update database
                 Executors.newSingleThreadExecutor().execute {
                     database.showDao().insertAllShows(response.body()?.shows!!.mapToShowsEntityList())
                 }
@@ -54,6 +55,7 @@ class ShowsViewModel(val database: ShowsDatabase) : ViewModel() {
             }
 
             override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                //in case of failure load database data
                 showsResultLiveData.value = database.showDao().getAllShows().value?.mapToShowsList()
 
             }

@@ -30,17 +30,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/clear_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:checked="false"
-                    android:focusable="true"
-                    android:text="@string/switch_label"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    app:layout_collapseMode="pin" />
 
                 <ImageButton
                     android:id="@+id/log_out_button"

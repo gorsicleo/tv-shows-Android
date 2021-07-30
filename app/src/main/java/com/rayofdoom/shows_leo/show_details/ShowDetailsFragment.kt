@@ -77,11 +77,7 @@ class ShowDetailsFragment : Fragment() {
                     findNavController().navigate(it)
                 }
             }
-            clearSwitch?.apply {
-                setOnClickListener {
-                    //viewModelShowDetails.loadDummyReviews(isChecked)
-                }
-            }
+
             buttonWriteReview.setOnClickListener {
                 showBottomSheet()
             }
