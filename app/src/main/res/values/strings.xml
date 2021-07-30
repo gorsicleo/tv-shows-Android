@@ -18,7 +18,7 @@
     <string name="error_password_no_number">Password should contain number</string>
     <string name="toast_message_no_score">You must enter score to submit a review!</string>
     <string name="display_average_format">%1$d REVIEWS, %2$.2f AVERAGE</string>
-    <string name="shows_cleared">Show list cleared</string>
+    <string name="shows_cleared">No shows available to show :(</string>
     <string name="switch_label">Clear list</string>
     <string name="switch_label_reviews">Load dummy reviews</string>
     <string name="reviews">Reviews</string>
@@ -30,4 +30,5 @@
     <string name="registration_successful">Registration successful!</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="login_failed">Login failed!</string>
+    <string name="empty_state_reviews">No reviews, start by creating one!</string>
 </resources>

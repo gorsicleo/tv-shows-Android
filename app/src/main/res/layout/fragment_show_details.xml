@@ -81,7 +81,7 @@
                 android:layout_marginBottom="29dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                tools:text="@tools:sample/lorem/random" />
+                tools:text="Bla bla bla..." />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,20 +99,6 @@
                     android:textStyle="bold"
                     tools:text="Reviews" />
 
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/clear_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:backgroundTint="@color/white"
-                    android:checked="false"
-                    android:focusable="true"
-                    android:src="@drawable/clear_icon"
-                    android:text="@string/switch_label_reviews"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    app:layout_collapseMode="pin" />
 
             </LinearLayout>
 
@@ -144,6 +130,19 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="104dp"
                 tools:listitem="@layout/item_review" />
+
+            <TextView
+                android:id="@+id/reviews_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:visibility="gone"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="104dp"
+                android:text="@string/empty_state_reviews"
+                tools:text="@string/empty_state_reviews"/>
+
 
 
         </LinearLayout>

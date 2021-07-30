@@ -1,5 +1,6 @@
 package com.rayofdoom.shows_leo.model
 
+import androidx.room.TypeConverter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
