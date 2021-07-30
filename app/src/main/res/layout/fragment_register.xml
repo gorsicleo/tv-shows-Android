@@ -15,51 +15,27 @@
 
         <TextView
             android:id="@+id/login_text"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold"
+            app:layout_constraintVertical_bias="0.4"
             app:layout_constraintBottom_toBottomOf="@+id/register_button"
-            app:layout_constraintEnd_toEndOf="@id/shows_title"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@+id/email_container"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/login_message"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/email_container"
-            app:layout_constraintTop_toBottomOf="@id/login_text" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_button"
-            style="@style/button_style"
-            android:enabled="false"
-            android:text="@string/login"
-            app:layout_constraintBottom_toBottomOf="@id/register_button"
-            app:layout_constraintEnd_toEndOf="@id/email_container"
-            app:layout_constraintStart_toStartOf="@id/login_text"
-            app:layout_constraintTop_toBottomOf="@id/password_container" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register_button"
             style="@style/button_style"
-            android:layout_marginTop="0dp"
-            android:backgroundTint="@color/rating_bar_purple"
             android:text="@string/register"
-            android:textColor="@color/white"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/email_container"
             app:layout_constraintStart_toStartOf="@id/login_text"
-            app:layout_constraintTop_toBottomOf="@id/login_button" />
+            app:layout_constraintTop_toBottomOf="@id/password_repeat_container" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_container"
@@ -109,6 +85,31 @@
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_repeat_container"
+            style="@style/login_text_input_layout_style"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="24dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/input_field_stroke_selector"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/login_text"
+            app:layout_constraintTop_toBottomOf="@+id/password_container"
+            app:layout_constraintWidth_percent="0.9">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_repeat_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/repeat_password"
+                android:inputType="textPassword"
+                android:paddingVertical="0dp"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ImageView
             android:id="@+id/top_right_illustration"
             android:layout_width="wrap_content"
@@ -139,7 +140,7 @@
             app:srcCompat="@drawable/welcome_triangle_ic" />
 
         <TextView
-            android:id="@+id/shows_title"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
@@ -151,16 +152,7 @@
             app:layout_constraintStart_toStartOf="@id/triangle"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <CheckBox
-            android:id="@+id/remember_me_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/white"
-            android:text="@string/remember_me_checkbox"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/password_container"
-            app:layout_constraintTop_toBottomOf="@id/password_container" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

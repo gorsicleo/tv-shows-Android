@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/login_fragment"
-        android:name="com.rayofdoom.shows_leo.LoginFragment"
+        android:name="com.rayofdoom.shows_leo.login.LoginFragment"
         tools:layout="@layout/fragment_login">
 
         <action
@@ -15,17 +15,45 @@
             app:destination="@id/shows_fragment"
             app:popUpTo="@id/login_fragment"
             app:popUpToInclusive="true"/>
+
+        <action android:id="@+id/action_login_to_register"
+            app:destination="@id/register_fragment"
+            app:popUpTo="@id/register_fragment"
+            app:popUpToInclusive="true"/>
+
+        <argument
+            android:name="register_success"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/register_fragment"
+        android:name="com.rayofdoom.shows_leo.login.RegisterFragment"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/login_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true"/>
+
+
     </fragment>
 
     <fragment
         android:id="@+id/shows_fragment"
-        android:name="com.rayofdoom.shows_leo.ShowsFragment"
+        android:name="com.rayofdoom.shows_leo.shows.ShowsFragment"
         tools:layout="@layout/fragment_shows">
 
         <argument
             android:name="username"
             app:argType="string"
             />
+
+        <argument
+            android:name="remember_me_checked"
+            app:argType="boolean"/>
 
         <action
             android:id="@+id/action_shows_to_shows_details"
@@ -36,13 +64,13 @@
         <action
             android:id="@+id/action_shows_to_login"
             app:destination="@id/login_fragment"
-            app:popUpTo="@id/login_fragment"
+            app:popUpTo="@id/shows_fragment"
             app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
         android:id="@+id/show_details_fragment"
-        android:name="com.rayofdoom.shows_leo.ShowDetailsFragment"
+        android:name="com.rayofdoom.shows_leo.show_details.ShowDetailsFragment"
         tools:layout="@layout/fragment_show_details">
 
         <argument

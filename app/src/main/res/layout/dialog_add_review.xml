@@ -6,9 +6,9 @@
     android:fitsSystemWindows="true"
     android:layout_gravity="bottom"
     android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@drawable/bottom_sheet_background">
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
