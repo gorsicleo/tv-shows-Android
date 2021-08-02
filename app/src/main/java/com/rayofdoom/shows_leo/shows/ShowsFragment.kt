@@ -90,7 +90,7 @@ class ShowsFragment : Fragment() {
                         it.noOfReviews
                     )
                 })
-                if (shows.isEmpty()){
+                if (shows.isEmpty()) {
                     clearShows(true)
                 }
             } else {
@@ -101,6 +101,7 @@ class ShowsFragment : Fragment() {
             PrefsUtil.updateUserImageUrl(requireActivity(), url)
             binding.logOutButton.displayAvatar(requireContext(), url)
         })
+
 
 
         binding.logOutButton.apply {
