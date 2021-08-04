@@ -1,10 +1,12 @@
 package com.rayofdoom.shows_leo.login
 
 import android.content.Context
-import android.widget.Toast
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rayofdoom.shows_leo.R
+import com.rayofdoom.shows_leo.databinding.FragmentLoginBinding
 import com.rayofdoom.shows_leo.model.User
 import com.rayofdoom.shows_leo.model.network_models.request.LoginRequest
 import com.rayofdoom.shows_leo.model.network_models.response.LoginResponse
@@ -14,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val NO_INTERNET_ERROR_MESSAGE = "Make sure you are connected to internet!"
+private const val INVALID_CREDENTIALS_ERROR_MESSAGE = "Invalid login credentials. Please try again."
 private const val ACCESS_TOKEN = "access-token"
 private const val CLIENT = "client"
 private const val UID = "uid"
@@ -37,7 +39,7 @@ class LoginViewModel : ViewModel() {
         return user
     }
 
-    fun login(email: String, password: String, context: Context) {
+    fun login(email: String, password: String, context: Context,binding: FragmentLoginBinding) {
         val request = LoginRequest(email, password)
 
         ApiModule.retrofit.login(request).enqueue(object : Callback<LoginResponse> {
@@ -60,11 +62,9 @@ class LoginViewModel : ViewModel() {
                 } else {
                     val message = response.errorBody()?.string()
                     if (message != null) {
-                        Toast.makeText(
-                            context,
-                            message.parseAPIError(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        if (message.parseAPIError() == INVALID_CREDENTIALS_ERROR_MESSAGE)
+                        binding.errorMessage.text = context.getString(R.string.invalid_credentials_error)
+                        binding.errorMessage.visibility = View.VISIBLE
                     }
                 }
 
@@ -73,8 +73,8 @@ class LoginViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(context, NO_INTERNET_ERROR_MESSAGE, Toast.LENGTH_LONG)
-                    .show()
+                binding.errorMessage.text = context.getString(R.string.network_error)
+                binding.errorMessage.visibility = View.VISIBLE
                 loginResultLiveData.value = false
             }
 

@@ -31,4 +31,6 @@
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="login_failed">Login failed!</string>
     <string name="empty_state_reviews">No reviews, start by creating one!</string>
+    <string name="invalid_credentials_error">Incorrect password. Please try again.</string>
+    <string name="network_error">Network error</string>
 </resources>
