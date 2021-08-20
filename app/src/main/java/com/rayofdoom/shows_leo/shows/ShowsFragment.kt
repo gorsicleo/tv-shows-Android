@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
 import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.ShowsApp
 import com.rayofdoom.shows_leo.databinding.DialogUserPanelBinding
@@ -76,27 +77,15 @@ class ShowsFragment : Fragment() {
             }
         }
 
+        binding.topRatedChip?.setOnClickListener {
+            viewModel.fetch((it as Chip).isChecked,requireContext())
+            displayShows()
+        }
 
-        viewModel.fetch()
-        viewModel.getShows().observe(this.viewLifecycleOwner, { shows ->
-            if (shows != null) {
-                initRecyclerView(shows.map {
-                    Show(
-                        it.showId,
-                        it.showTitle,
-                        it.showDescription,
-                        it.imageResource,
-                        it.averageRating,
-                        it.noOfReviews
-                    )
-                })
-                if (shows.isEmpty()) {
-                    clearShows(true)
-                }
-            } else {
-                clearShows(true)
-            }
-        })
+
+        binding.topRatedChip?.let { viewModel.fetch(it.isChecked,requireContext()) }
+        displayShows()
+
         viewModel.getUserPhotoLiveData().observe(this.viewLifecycleOwner, { url ->
             PrefsUtil.updateUserImageUrl(requireActivity(), url)
             binding.logOutButton.displayAvatar(requireContext(), url)
@@ -116,11 +105,37 @@ class ShowsFragment : Fragment() {
 
     }
 
+    private fun displayShows(){
+        viewModel.getShows().observe(this.viewLifecycleOwner, { shows ->
+            if (shows != null) {
+                initRecyclerView(shows.map {
+                    Show(
+                        it.showId,
+                        it.showTitle,
+                        it.showDescription,
+                        it.imageResource,
+                        it.averageRating,
+                        it.noOfReviews
+                    )
+                },binding.topRatedChip!!.isChecked)
+                if (shows.isEmpty()) {
+                    clearShows(true)
+                }
+            } else {
+                clearShows(true)
+            }
+        })
+    }
 
-    private fun initRecyclerView(shows: List<Show>) {
+
+    private fun initRecyclerView(shows: List<Show>, topRated: Boolean) {
+        var showsOrdered = shows
+        if (topRated) {
+            showsOrdered = shows.sortedByDescending { it.averageRating }
+        }
         binding.showsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.showsRecycler.adapter = ShowsAdapter(shows, requireContext()) { show ->
+        binding.showsRecycler.adapter = ShowsAdapter(showsOrdered, requireContext()) { show ->
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,

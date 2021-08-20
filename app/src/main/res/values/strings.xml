@@ -33,4 +33,5 @@
     <string name="empty_state_reviews">No reviews, start by creating one!</string>
     <string name="invalid_credentials_error">Incorrect password. Please try again.</string>
     <string name="network_error">Network error</string>
+    <string name="top_rated">Top rated</string>
 </resources>

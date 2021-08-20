@@ -24,6 +24,8 @@
             app:title="@string/shows_title">
 
 
+
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -43,6 +45,25 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_profile_placeholder"
                     app:layout_collapseMode="pin" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/top_rated_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/top_rated"
+                    app:chipIcon="@drawable/top_rated_ic"
+                    app:chipBackgroundColor="@color/chip_bg_color_selector"
+                    app:chipStrokeWidth="1dp"
+                    android:clickable="true"
+                    app:checkedIconVisible="false"
+                    android:checkable="true"
+                    app:chipStrokeColor="@color/chip_text_color"
+                    app:chipIconTint="@color/chip_text_color"
+                    android:textColor="@color/chip_text_color"
+                    android:focusable="true" />
+
+
 
 
             </androidx.appcompat.widget.Toolbar>

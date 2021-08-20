@@ -40,26 +40,44 @@ class ShowsViewModel(val database: ShowsDatabase) : ViewModel() {
     }
 
 
-    fun fetch() {
-        ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
-            override fun onResponse(
-                call: Call<ShowsResponse>,
-                response: Response<ShowsResponse>
-            ) {
-                showsResultLiveData.value = response.body()?.shows
-                //update database
-                Executors.newSingleThreadExecutor().execute {
-                    database.showDao().insertAllShows(response.body()?.shows!!.mapToShowsEntityList())
+    fun fetch(topRated: Boolean = false,context: Context) {
+        if (!topRated) {
+            ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
+                override fun onResponse(
+                    call: Call<ShowsResponse>,
+                    response: Response<ShowsResponse>
+                ) {
+                    showsResultLiveData.value = response.body()?.shows
+                    //update database
+                    Executors.newSingleThreadExecutor().execute {
+                        database.showDao()
+                            .insertAllShows(response.body()?.shows!!.mapToShowsEntityList())
+                    }
+
                 }
 
-            }
+                override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                    //in case of failure load database data
+                    showsResultLiveData.value =
+                        database.showDao().getAllShows().value?.mapToShowsList()
 
-            override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
-                //in case of failure load database data
-                showsResultLiveData.value = database.showDao().getAllShows().value?.mapToShowsList()
+                }
+            })
+        } else {
+            ApiModule.retrofit.fetchTopRatedShows().enqueue(object : Callback<ShowsResponse> {
+                override fun onResponse(
+                    call: Call<ShowsResponse>,
+                    response: Response<ShowsResponse>
+                ) {
+                    showsResultLiveData.value = response.body()?.shows
+                }
 
-            }
-        })
+                override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                    Toast.makeText(context, "You cannot fetch top rated shows in offline mode!", Toast.LENGTH_SHORT).show()
+
+                }
+            })
+        }
 
     }
 
