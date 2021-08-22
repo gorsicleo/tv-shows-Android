@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
@@ -34,6 +35,7 @@ private const val USERNAME = "username"
 
 class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
+    private var gridButtonState = false
     private val binding get() = _binding!!
     private val args: ShowsFragmentArgs by navArgs()
     private val viewModel: ShowsViewModel by viewModels {
@@ -77,14 +79,30 @@ class ShowsFragment : Fragment() {
             }
         }
 
-        binding.topRatedChip?.setOnClickListener {
-            viewModel.fetch((it as Chip).isChecked,requireContext())
-            displayShows()
+        binding.topRatedChip?.apply {
+            this.setOnClickListener{
+                viewModel.fetch((it as Chip).isChecked,requireContext())
+                displayShows(gridButtonState)
+            }
+            viewModel.fetch(this.isChecked,requireContext())
+            displayShows(gridButtonState)
         }
 
+        binding.fabViewSwitch?.apply {
 
-        binding.topRatedChip?.let { viewModel.fetch(it.isChecked,requireContext()) }
-        displayShows()
+            this.setOnClickListener {
+                gridButtonState = gridButtonState.not()
+                if (gridButtonState) {
+                    binding.showsRecycler.invalidate()
+                    displayShows(gridButtonState)
+                    this.setImageResource(R.drawable.ic_recycler)
+                } else {
+                    binding.showsRecycler.invalidate()
+                    displayShows(gridButtonState)
+                    this.setImageResource(R.drawable.ic_grid)
+                }
+            }
+        }
 
         viewModel.getUserPhotoLiveData().observe(this.viewLifecycleOwner, { url ->
             PrefsUtil.updateUserImageUrl(requireActivity(), url)
@@ -105,7 +123,7 @@ class ShowsFragment : Fragment() {
 
     }
 
-    private fun displayShows(){
+    private fun displayShows(grid: Boolean){
         viewModel.getShows().observe(this.viewLifecycleOwner, { shows ->
             if (shows != null) {
                 initRecyclerView(shows.map {
@@ -117,7 +135,7 @@ class ShowsFragment : Fragment() {
                         it.averageRating,
                         it.noOfReviews
                     )
-                },binding.topRatedChip!!.isChecked)
+                },binding.topRatedChip!!.isChecked,grid)
                 if (shows.isEmpty()) {
                     clearShows(true)
                 }
@@ -128,14 +146,18 @@ class ShowsFragment : Fragment() {
     }
 
 
-    private fun initRecyclerView(shows: List<Show>, topRated: Boolean) {
+    private fun initRecyclerView(shows: List<Show>, topRated: Boolean,grid: Boolean) {
         var showsOrdered = shows
+        var layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         if (topRated) {
             showsOrdered = shows.sortedByDescending { it.averageRating }
         }
-        binding.showsRecycler.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.showsRecycler.adapter = ShowsAdapter(showsOrdered, requireContext()) { show ->
+
+        if (grid) {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+        binding.showsRecycler.layoutManager = layoutManager
+        binding.showsRecycler.adapter = ShowsAdapter(grid,showsOrdered, requireContext()) { show ->
 
             ShowsFragmentDirections.actionShowsToShowsDetails(
                 args.username,

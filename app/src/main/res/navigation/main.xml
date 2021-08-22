@@ -11,12 +11,14 @@
         tools:layout="@layout/fragment_splash">
 
         <action
-            app:enterAnim="@anim/nav_default_pop_enter_anim"
-            app:exitAnim="@anim/nav_default_pop_exit_anim"
             android:id="@+id/action_splash_to_login"
             app:destination="@id/login_fragment"
             app:popUpTo="@id/splash_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
 
     </fragment>
@@ -30,12 +32,20 @@
             android:id="@+id/action_login_to_shows"
             app:destination="@id/shows_fragment"
             app:popUpTo="@id/login_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
         <action android:id="@+id/action_login_to_register"
             app:destination="@id/register_fragment"
             app:popUpTo="@id/register_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
         <argument
             android:name="register_success"
@@ -52,7 +62,11 @@
             android:id="@+id/action_register_to_login"
             app:destination="@id/login_fragment"
             app:popUpTo="@id/login_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
 
     </fragment>
@@ -75,13 +89,21 @@
             android:id="@+id/action_shows_to_shows_details"
             app:destination="@id/show_details_fragment"
             app:popUpTo="@id/show_details_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
         <action
             android:id="@+id/action_shows_to_login"
             app:destination="@id/login_fragment"
             app:popUpTo="@id/shows_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_left"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
     </fragment>
 
     <fragment
@@ -102,7 +124,11 @@
             android:id="@+id/action_show_details_to_shows"
             app:destination="@id/shows_fragment"
             app:popUpTo="@id/shows_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/animation_slide_right"
+            app:exitAnim="@anim/animation_wait"
+            app:popEnterAnim="@anim/animation_wait"
+            app:popExitAnim="@anim/animation_slide_right" />
 
     </fragment>
 
