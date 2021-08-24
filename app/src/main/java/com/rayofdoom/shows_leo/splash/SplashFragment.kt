@@ -46,7 +46,9 @@ class SplashFragment : Fragment() {
             override fun onAnimationEnd(animation: Animation?) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     val action = SplashFragmentDirections.actionSplashToLogin()
-                    findNavController().navigate(action)
+                    view?.post {
+                        findNavController().navigate(action)
+                    }
                 }, 2000)
 
             }
