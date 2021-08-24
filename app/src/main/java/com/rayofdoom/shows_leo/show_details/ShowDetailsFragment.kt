@@ -127,7 +127,6 @@ class ShowDetailsFragment : Fragment() {
             showDetailsDescription.text = show.showDescription
             show.imageResource?.let { showDetailsImage.displayShowImage(requireContext(), it) }
             collapsingToolbar?.title = show.showTitle
-            showDetailsTitle?.text = show.showTitle
             displayAverage(show)
         }
     }
