@@ -36,12 +36,12 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:focusable="true"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_profile_placeholder"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/ic_profile_placeholder"
                     app:layout_collapseMode="pin" />
 
 
@@ -53,9 +53,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/no_shows_layout"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/no_shows"
