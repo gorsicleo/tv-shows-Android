@@ -62,7 +62,7 @@ class ShowDetailsFragment : Fragment() {
             BASE_URL + args.showId.toString() + "/reviews",
             args.showId.toString()
         )
-        startViewModels()
+        startViewModel()
         setClickListeners()
 
     }
@@ -96,7 +96,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
 
-    private fun startViewModels() {
+    private fun startViewModel() {
 
         viewModelShowDetails.apply {
             getReviewsLiveData(args.showId.toString()).observe(viewLifecycleOwner, { reviews ->
@@ -127,7 +127,7 @@ class ShowDetailsFragment : Fragment() {
             showDetailsDescription.text = show.showDescription
             show.imageResource?.let { showDetailsImage.displayShowImage(requireContext(), it) }
             collapsingToolbar?.title = show.showTitle
-            showDetailsTitle?.text = show.showTitle
+            //showDetailsTitle?.text = show.showTitle
             displayAverage(show)
         }
     }
@@ -135,6 +135,7 @@ class ShowDetailsFragment : Fragment() {
     private fun initRecyclerView(reviews: List<Review>) {
         binding.reviewsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        if (reviews.isNotEmpty()) binding.reviewsEmptyState?.visibility = View.GONE
         reviewsAdapter =
             ItemReviewAdapter(reviews.reversed(), requireContext())
         binding.reviewsRecycler.adapter = reviewsAdapter

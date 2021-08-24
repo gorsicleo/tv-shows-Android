@@ -3,6 +3,7 @@ package com.rayofdoom.shows_leo.shows
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import com.rayofdoom.shows_leo.R
 import com.rayofdoom.shows_leo.databinding.ViewShowItemBinding
@@ -18,7 +19,7 @@ class ShowCardView @JvmOverloads constructor(
         ViewShowItemBinding.inflate(LayoutInflater.from(context), this)
 
     init {
-        val pixelPadding = context.resources.getDimensionPixelSize(R.dimen.card_padding)
+        val pixelPadding = context.resources.getDimensionPixelSize(R.dimen.card_padding)/2
         setPadding(pixelPadding, pixelPadding, pixelPadding, pixelPadding)
         clipToPadding = false
     }
@@ -29,6 +30,10 @@ class ShowCardView @JvmOverloads constructor(
 
     fun setDescription(desc: String?) {
         binding.showDescription.text = desc
+    }
+
+    fun hideDescription(value: Boolean){
+        if (value) binding.showDescription.visibility = View.GONE
     }
 
     fun setImage(url: String?) {

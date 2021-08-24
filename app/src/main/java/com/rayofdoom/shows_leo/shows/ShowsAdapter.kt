@@ -7,6 +7,7 @@ import com.rayofdoom.shows_leo.model.Show
 
 
 class ShowsAdapter(
+    private val grid: Boolean,
     private var items: List<Show>,
     private var context: Context,
     private val onClickCallback: (Show) -> Unit,
@@ -32,7 +33,7 @@ class ShowsAdapter(
             showCardView.setTitle(item.showTitle)
             showCardView.setDescription(item.showDescription)
             showCardView.setImage(item.imageResource)
-
+            showCardView.hideDescription(grid)
             showCardView.setOnClickListener {
                 onClickCallback(item)
             }

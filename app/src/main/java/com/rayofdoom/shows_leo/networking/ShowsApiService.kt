@@ -19,6 +19,9 @@ interface ShowsApiService {
     @GET("/shows")
     fun fetchShows(): Call<ShowsResponse>
 
+    @GET("/shows/top_rated")
+    fun fetchTopRatedShows(): Call<ShowsResponse>
+
     @GET
     fun fetchShow(@Url url: String): Call<ShowDetailsResponse>
 
