@@ -17,6 +17,7 @@ Clone repository and build APK file using Android studio or similar IDE. Future 
 <img src="https://github.com/gorsicleo/tv-shows-Android/blob/master/Screenshots/5.jpg?raw=true" width="300" height="600">
 <img src="https://github.com/gorsicleo/tv-shows-Android/blob/master/Screenshots/6.jpg?raw=true" width="300" height="600">
 <img src="https://github.com/gorsicleo/tv-shows-Android/blob/master/Screenshots/7.jpg?raw=true" width="300" height="600">
+<img src="https://github.com/gorsicleo/tv-shows-Android/blob/master/Screenshots/8.jpg?raw=true" width="300" height="600">
 
 ### What I have learned and technologies I have used
 
